@@ -11,13 +11,26 @@ class RegistrationController: UIViewController {
     // MARK: - Properties
     private let titleLabel: UILabel = .createAppLabel()
     
-    private let emailTextField = FormTextField(placeholder: "Email")
+    private lazy var emailTextField:FormTextField = {
+        let textField = FormTextField(placeholder: "Email")
+        textField.delegate = self
+        return textField
+    }()
     private lazy var emailContainerView = FormFieldContainer(formTextField: emailTextField, icon: .email)
     
-    private let fullnameTextField = FormTextField(placeholder: "Full Name")
+    private lazy var fullnameTextField:FormTextField = {
+        let textField = FormTextField(placeholder: "Full Name")
+        textField.delegate = self
+        return textField
+    }()
     private lazy var fullnameContainerView = FormFieldContainer(formTextField: fullnameTextField, icon: .fullname)
     
-    private let passwordTextField = FormTextField(placeholder: "Password", isSecured: true)
+    private lazy var passwordTextField: FormTextField = {
+        
+        let textField = FormTextField(placeholder: "Password", isSecured: true)
+        textField.delegate = self
+        return textField
+    }()
     private lazy var passwordContainerView = FormFieldContainer(formTextField: passwordTextField, icon: .password)
     
     private let userTypeSegmentedControl:UISegmentedControl = {
@@ -44,10 +57,23 @@ class RegistrationController: UIViewController {
         return button
     }()
     
+    private var activeTextField: UITextField? = nil
+    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNotifcationObservers()
+    }
+    
+    deinit {
+      NotificationCenter.default.removeObserver(self, name:  UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name:  UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     // MARK: - Selectors
@@ -57,6 +83,39 @@ class RegistrationController: UIViewController {
     
     @objc private func alreadyHaveAnAccountHandler(){
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification){
+        
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+               let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            let bounds = UIScreen.main.bounds
+            let screenHeight = bounds.size.height
+            
+            let textFieldParentViewOriginY = activeTextField!.superview!.frame.origin.y
+            let textFieldParentFrameHeight = activeTextField!.superview!.frame.height
+            
+            let topElementWithHeight = titleLabel.frame.height
+            let topElementPadding:CGFloat = 40
+    
+            let visibleUI = screenHeight - (CGFloat(textFieldParentViewOriginY) + CGFloat(textFieldParentFrameHeight) + CGFloat(topElementWithHeight) + CGFloat(topElementPadding))
+            
+            if visibleUI < keyboardHeight + 25 {
+                if view.frame.origin.y == 0 {
+                    
+                    let additionalHeight = abs(visibleUI - keyboardHeight) + 25
+                    self.view.frame.origin.y -= additionalHeight
+                }
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification){
+        if view.frame.origin.y != 0 {
+            view.frame.origin.y = 0
+        }
     }
     
     // MARK: - Helpers
@@ -93,5 +152,28 @@ class RegistrationController: UIViewController {
     private func setupAlreadyHaveAnAccountButton(){
         view.addSubview(alreadyHaveAnAccountButton)
         alreadyHaveAnAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingLeft: 16, paddingRight: 16)
+    }
+    
+    private func setupNotifcationObservers(){
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+}
+
+// MARK: - UITextField Delegate
+extension RegistrationController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        activeTextField = textField
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        activeTextField = nil
     }
 }

@@ -16,6 +16,7 @@ class FormTextField: UITextField {
         textColor = .white
         keyboardAppearance = .dark
         isSecureTextEntry = isSecured
+        textContentType = .none
         attributedPlaceholder = NSAttributedString(string: placeholder,attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         isEnabled = true
     }
