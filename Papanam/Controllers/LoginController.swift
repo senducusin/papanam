@@ -1,5 +1,5 @@
 //
-//  Login.swift
+//  LoginController.swift
 //  Papanam
 //
 //  Created by Jansen Ducusin on 5/1/21.
@@ -7,24 +7,17 @@
 
 import UIKit
 
-class Login:UIViewController {
+class LoginController:UIViewController {
     // MARK: - Properties
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "PAPANAM"
-        label.font = UIFont(name: "Avenir-Light", size: 36)
-        label.textAlignment = .center
-        label.textColor = .themeWhiteText
-        return label
-    }()
+    private let titleLabel: UILabel = .createAppLabel()
     
     private let emailTextField = FormTextField(placeholder: "Email")
     
-    private lazy var emailContainerView = FormTextFieldContainer(formTextField: emailTextField, icon: .email)
+    private lazy var emailContainerView = FormFieldContainer(formTextField: emailTextField, icon: .email)
     
     private let passwordTextField = FormTextField(placeholder: "Password", isSecured: true)
     
-    private lazy var passwordContainerView = FormTextFieldContainer(formTextField: passwordTextField, icon: .password)
+    private lazy var passwordContainerView = FormFieldContainer(formTextField: passwordTextField, icon: .password)
     
     private lazy var loginButton: FormButton = {
         let button = FormButton(type: .system)
@@ -46,22 +39,28 @@ class Login:UIViewController {
         setupUI()
     }
     
-    // MARK: - Lifecycles
+    // MARK: - Selectors
     @objc private func loginHandler(){
         print("DEBUG: login")
     }
     
     @objc private func dontHaveAccountHandler(){
-        print("DEBUG: don't have an account")
+        let controller = RegistrationController()
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     // MARK: - Helpers
     private func setupUI(){
         view.backgroundColor = .themeBlack
-        
+
+        setupNavigation()
         setupTitleLabel()
         setupStack()
         setupDontHaveAccountButton()
+    }
+    
+    private func setupNavigation(){
+        navigationController?.navigationBar.isHidden = true
     }
     
     private func setupTitleLabel(){
@@ -72,7 +71,10 @@ class Login:UIViewController {
     
     private func setupStack(){
         let paddingSides:CGFloat = 16
-        let stackView = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView, loginButton])
+        let stackView = UIStackView(arrangedSubviews: [
+                                        emailContainerView,
+                                        passwordContainerView,
+                                        loginButton])
         stackView.spacing = 24
         stackView.axis = .vertical
         stackView.distribution = .fillEqually

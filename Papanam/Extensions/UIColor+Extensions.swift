@@ -17,5 +17,5 @@ extension UIColor {
     static let themeBlack = UIColor.rgba(red: 25, green: 25, blue: 25, alpha: 1)
     static let themeBlue = UIColor.rgba(red: 17, green: 154, blue: 237, alpha: 1)
     
-    static let themeWhiteText = UIColor(white: 1, alpha: 0.8)
+    static let themeWhiteText = UIColor(white: 1, alpha: 0.87)
 }

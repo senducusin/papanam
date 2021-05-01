@@ -11,14 +11,16 @@
 		A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAB7263CDBAD005F1C98 /* SceneDelegate.swift */; };
 		A690FABF263CDBAE005F1C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A690FABE263CDBAE005F1C98 /* Assets.xcassets */; };
 		A690FAC2263CDBAE005F1C98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A690FAC0263CDBAE005F1C98 /* LaunchScreen.storyboard */; };
-		A690FACB263CDD75005F1C98 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FACA263CDD75005F1C98 /* Login.swift */; };
+		A690FACB263CDD75005F1C98 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FACA263CDD75005F1C98 /* LoginController.swift */; };
 		A690FACE263CDDFA005F1C98 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FACD263CDDFA005F1C98 /* UIView+Extensions.swift */; };
 		A690FAD0263CDFD0005F1C98 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FACF263CDFD0005F1C98 /* UIColor+Extensions.swift */; };
 		A690FAD3263CEB0A005F1C98 /* FormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAD2263CEB0A005F1C98 /* FormTextField.swift */; };
-		A690FAD5263CEC0C005F1C98 /* FormTextFieldContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAD4263CEC0C005F1C98 /* FormTextFieldContainer.swift */; };
+		A690FAD5263CEC0C005F1C98 /* FormFieldContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAD4263CEC0C005F1C98 /* FormFieldContainer.swift */; };
 		A690FAD7263CED0F005F1C98 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAD6263CED0F005F1C98 /* UIImage+Extensions.swift */; };
 		A690FADB263CF4E0005F1C98 /* FormButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FADA263CF4E0005F1C98 /* FormButton.swift */; };
 		A690FADD263CF61D005F1C98 /* FormAttributedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */; };
+		A690FADF263CFC86005F1C98 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FADE263CFC86005F1C98 /* RegistrationController.swift */; };
+		A690FAE1263CFE0D005F1C98 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,14 +30,16 @@
 		A690FABE263CDBAE005F1C98 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A690FAC1263CDBAE005F1C98 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A690FAC3263CDBAE005F1C98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A690FACA263CDD75005F1C98 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
+		A690FACA263CDD75005F1C98 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		A690FACD263CDDFA005F1C98 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		A690FACF263CDFD0005F1C98 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		A690FAD2263CEB0A005F1C98 /* FormTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextField.swift; sourceTree = "<group>"; };
-		A690FAD4263CEC0C005F1C98 /* FormTextFieldContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextFieldContainer.swift; sourceTree = "<group>"; };
+		A690FAD4263CEC0C005F1C98 /* FormFieldContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldContainer.swift; sourceTree = "<group>"; };
 		A690FAD6263CED0F005F1C98 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		A690FADA263CF4E0005F1C98 /* FormButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormButton.swift; sourceTree = "<group>"; };
 		A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAttributedButton.swift; sourceTree = "<group>"; };
+		A690FADE263CFC86005F1C98 /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
+		A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +87,8 @@
 		A690FAC9263CDCD4005F1C98 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A690FACA263CDD75005F1C98 /* Login.swift */,
+				A690FACA263CDD75005F1C98 /* LoginController.swift */,
+				A690FADE263CFC86005F1C98 /* RegistrationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -94,6 +99,7 @@
 				A690FACD263CDDFA005F1C98 /* UIView+Extensions.swift */,
 				A690FACF263CDFD0005F1C98 /* UIColor+Extensions.swift */,
 				A690FAD6263CED0F005F1C98 /* UIImage+Extensions.swift */,
+				A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -102,7 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				A690FAD2263CEB0A005F1C98 /* FormTextField.swift */,
-				A690FAD4263CEC0C005F1C98 /* FormTextFieldContainer.swift */,
+				A690FAD4263CEC0C005F1C98 /* FormFieldContainer.swift */,
 				A690FADA263CF4E0005F1C98 /* FormButton.swift */,
 				A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */,
 			);
@@ -178,12 +184,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A690FACB263CDD75005F1C98 /* Login.swift in Sources */,
+				A690FAE1263CFE0D005F1C98 /* UILabel+Extensions.swift in Sources */,
+				A690FACB263CDD75005F1C98 /* LoginController.swift in Sources */,
 				A690FADD263CF61D005F1C98 /* FormAttributedButton.swift in Sources */,
 				A690FAD3263CEB0A005F1C98 /* FormTextField.swift in Sources */,
 				A690FAD0263CDFD0005F1C98 /* UIColor+Extensions.swift in Sources */,
 				A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */,
-				A690FAD5263CEC0C005F1C98 /* FormTextFieldContainer.swift in Sources */,
+				A690FAD5263CEC0C005F1C98 /* FormFieldContainer.swift in Sources */,
+				A690FADF263CFC86005F1C98 /* RegistrationController.swift in Sources */,
 				A690FADB263CF4E0005F1C98 /* FormButton.swift in Sources */,
 				A690FACE263CDDFA005F1C98 /* UIView+Extensions.swift in Sources */,
 				A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */,

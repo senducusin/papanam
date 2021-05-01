@@ -29,6 +29,9 @@ class FormAttributedButton: UIButton {
         if let title = titleWithQuestionMark, title.contains("?") {
             let attributedString = convertTitleToAttributedText()
             setAttributedTitle(attributedString, for: .normal)
+        }else {
+            setTitle(titleWithQuestionMark, for: .normal)
+            setTitleColor(.themeWhiteText, for: .normal)
         }
     }
     
@@ -42,11 +45,11 @@ class FormAttributedButton: UIButton {
         let regularLabel = labels[0]
         let boldLabel = labels[1]
         
-        let attributes: [NSAttributedString.Key:Any] = [.foregroundColor: UIColor(white: 1, alpha: 0.87), .font:UIFont.systemFont(ofSize:15)]
+        let attributes: [NSAttributedString.Key:Any] = [.foregroundColor: UIColor.themeWhiteText, .font:UIFont.systemFont(ofSize:15)]
         
         let attributedTitle = NSMutableAttributedString(string: "\(regularLabel)?", attributes: attributes)
         
-        let boldAttributes: [NSAttributedString.Key:Any] = [.foregroundColor: UIColor(white: 1, alpha: 0.87), .font: UIFont.boldSystemFont(ofSize: 15)]
+        let boldAttributes: [NSAttributedString.Key:Any] = [.foregroundColor: UIColor.themeBlue, .font: UIFont.boldSystemFont(ofSize: 15)]
         
         attributedTitle.append(NSAttributedString(string: " \(boldLabel)", attributes: boldAttributes))
         
