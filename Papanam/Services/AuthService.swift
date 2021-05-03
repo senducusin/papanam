@@ -48,4 +48,16 @@ class AuthService {
             completion(nil)
         }
     }
+    
+    static func loginUserWith(email:String, password:String, completion:@escaping errorCompletion){
+        
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            completion(nil)
+        }
+    }
 }

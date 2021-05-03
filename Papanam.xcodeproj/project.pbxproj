@@ -27,6 +27,8 @@
 		A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */; };
 		A6B62DC5263F9240008BB0EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6B62DC4263F9240008BB0EB /* GoogleService-Info.plist */; };
 		A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */; };
+		A6B62DCA263F9AA7008BB0EB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC9263F9AA7008BB0EB /* LoginViewModel.swift */; };
+		A6B62DCC263F9D46008BB0EB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DCB263F9D46008BB0EB /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +56,8 @@
 		A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		A6B62DC4263F9240008BB0EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
+		A6B62DC9263F9AA7008BB0EB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		A6B62DCB263F9D46008BB0EB /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				A6B62DC0263F8783008BB0EB /* NewUser.swift */,
+				A6B62DCB263F9D46008BB0EB /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -165,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */,
+				A6B62DC9263F9AA7008BB0EB /* LoginViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -302,9 +308,11 @@
 				A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */,
 				A690FAD5263CEC0C005F1C98 /* FormFieldContainer.swift in Sources */,
 				A690FADF263CFC86005F1C98 /* RegistrationController.swift in Sources */,
+				A6B62DCA263F9AA7008BB0EB /* LoginViewModel.swift in Sources */,
 				A690FADB263CF4E0005F1C98 /* FormButton.swift in Sources */,
 				A690FACE263CDDFA005F1C98 /* UIView+Extensions.swift in Sources */,
 				A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */,
+				A6B62DCC263F9D46008BB0EB /* User.swift in Sources */,
 				A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */,
 				A690FAD7263CED0F005F1C98 /* UIImage+Extensions.swift in Sources */,
 				A6B62DC1263F8783008BB0EB /* NewUser.swift in Sources */,

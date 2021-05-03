@@ -11,11 +11,19 @@ class LoginController:UIViewController {
     // MARK: - Properties
     private let titleLabel: UILabel = .createAppLabel()
     
-    private let emailTextField = FormTextField(placeholder: "Email")
+    private let emailTextField: FormTextField = {
+        let textField = FormTextField(placeholder: "Email")
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        return textField
+    }()
     
     private lazy var emailContainerView = FormFieldContainer(formTextField: emailTextField, icon: .email)
     
-    private let passwordTextField = FormTextField(placeholder: "Password", isSecured: true)
+    private let passwordTextField: FormTextField = {
+        let textField = FormTextField(placeholder: "Password", isSecured: true)
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
+        return textField
+    }()
     
     private lazy var passwordContainerView = FormFieldContainer(formTextField: passwordTextField, icon: .password)
     
@@ -33,6 +41,8 @@ class LoginController:UIViewController {
         return button
     }()
     
+    private var viewModel = LoginViewModel()
+    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +51,17 @@ class LoginController:UIViewController {
     
     // MARK: - Selectors
     @objc private func loginHandler(){
-        print("DEBUG: login")
+        guard let email = viewModel.email,
+              let password = viewModel.password else {return}
+        
+        AuthService.loginUserWith(email: email, password: password) { error in
+            if let error = error{
+                print("DEBUG: \(error.localizedDescription)")
+                return
+            }
+            
+            print("DEBUG: Successfully logged in")
+        }
     }
     
     @objc private func dontHaveAccountHandler(){
@@ -49,14 +69,36 @@ class LoginController:UIViewController {
         navigationController?.pushViewController(controller, animated: true)
     }
     
+    @objc private func textDidChange(_ sender: UITextField){
+        switch sender {
+        case emailTextField:
+            viewModel.email = sender.text
+            
+        case passwordTextField:
+            viewModel.password = sender.text
+            
+        default:
+            break
+        }
+        
+        loginButton.isEnabled = viewModel.formIsValid
+    }
+    
     // MARK: - Helpers
     private func setupUI(){
         view.backgroundColor = .themeBlack
-
+        
         setupNavigation()
         setupTitleLabel()
         setupStack()
         setupDontHaveAccountButton()
+    }
+    
+    private func clearForm(){
+        emailTextField.text = ""
+        passwordTextField.text = ""
+        viewModel.clearForm()
+        loginButton.isEnabled = viewModel.formIsValid
     }
     
     private func setupNavigation(){
@@ -87,5 +129,5 @@ class LoginController:UIViewController {
         view.addSubview(dontHaveAccountButton)
         dontHaveAccountButton.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingLeft: 16, paddingRight: 16)
     }
-
+    
 }

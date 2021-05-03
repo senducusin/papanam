@@ -82,9 +82,9 @@ class RegistrationController: UIViewController {
     
     // MARK: - Selectors
     @objc private func signupHandler(){
-        guard let email = emailTextField.text,
-              let password = passwordTextField.text,
-              let fullname = fullnameTextField.text,
+        guard let email = viewModel.email,
+              let password = viewModel.password,
+              let fullname = viewModel.fullname,
               let userType = UserType(rawValue: userTypeSegmentedControl.selectedSegmentIndex) else {return}
         
         let newUser = NewUser(email: email, fullname: fullname, userType: userType, password: password)
@@ -118,12 +118,16 @@ class RegistrationController: UIViewController {
     @objc func textDidChange(_ sender: UITextField){
         
         switch sender {
+        
         case emailTextField:
             viewModel.email = sender.text
+            
         case fullnameTextField:
             viewModel.fullname = sender.text
+            
         case passwordTextField:
             viewModel.password = sender.text
+            
         default:
             break
         }
