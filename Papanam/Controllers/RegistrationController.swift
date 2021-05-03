@@ -85,7 +85,7 @@ class RegistrationController: UIViewController {
         guard let email = emailTextField.text,
               let password = passwordTextField.text,
               let fullname = fullnameTextField.text,
-              let userType = userTypeSegmentedControl.titleForSegment(at: userTypeSegmentedControl.selectedSegmentIndex)  else {return}
+              let userType = UserType(rawValue: userTypeSegmentedControl.selectedSegmentIndex) else {return}
         
         let newUser = NewUser(email: email, fullname: fullname, userType: userType, password: password)
         
@@ -117,8 +117,6 @@ class RegistrationController: UIViewController {
     
     @objc func textDidChange(_ sender: UITextField){
         
-        print("DEBUG: did change")
-        
         switch sender {
         case emailTextField:
             viewModel.email = sender.text
@@ -146,6 +144,8 @@ class RegistrationController: UIViewController {
         fullnameTextField.text = ""
         passwordTextField.text = ""
         userTypeSegmentedControl.selectedSegmentIndex = 0
+        viewModel.clearForm()
+        sigupButton.isEnabled = viewModel.formIsValid
     }
     
     private func adjustViewToFitKeyboard(keyboardFrame:NSValue){

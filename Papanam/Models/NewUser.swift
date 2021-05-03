@@ -7,10 +7,15 @@
 
 import Foundation
 
+enum UserType:Int, Encodable {
+    case rider
+    case driver
+}
+
 struct NewUser:Encodable{
     let email: String
     let fullname: String
-    let userType: String
+    let userType: UserType
     
     var password: String?
 }

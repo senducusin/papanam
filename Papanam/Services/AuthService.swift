@@ -13,6 +13,7 @@ typealias errorCompletion = ((Error?) -> ())
 enum AuthServiceError: Error {
     case passwordIsEmpty
     case encodingError
+    case uidNotFound
 }
 
 class AuthService {
@@ -32,13 +33,18 @@ class AuthService {
             
             // clean password
             let newUser = NewUser(newUser)
-            
+             
             guard let newUserDictionary = newUser.toDictionary() else {
                 completion(AuthServiceError.encodingError)
                 return
             }
             
-            dbUserReference.updateChildValues(newUserDictionary)
+            guard let uid = result?.user.uid else {
+                completion(AuthServiceError.uidNotFound)
+                return
+            }
+            
+            dbUserReference.child(uid).updateChildValues(newUserDictionary)
             completion(nil)
         }
     }

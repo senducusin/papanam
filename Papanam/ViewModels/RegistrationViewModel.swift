@@ -24,4 +24,10 @@ struct RegistrationViewModel{
         
         return true
     }
+    
+    mutating func clearForm(){
+        email = nil
+        password = nil
+        fullname = nil
+    }
 }
