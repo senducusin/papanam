@@ -14,6 +14,7 @@ class RegistrationController: UIViewController {
     private lazy var emailTextField:FormTextField = {
         let textField = FormTextField(placeholder: "Email")
         textField.delegate = self
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         return textField
     }()
     private lazy var emailContainerView = FormFieldContainer(formTextField: emailTextField, icon: .email)
@@ -21,6 +22,7 @@ class RegistrationController: UIViewController {
     private lazy var fullnameTextField:FormTextField = {
         let textField = FormTextField(placeholder: "Full Name")
         textField.delegate = self
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         return textField
     }()
     private lazy var fullnameContainerView = FormFieldContainer(formTextField: fullnameTextField, icon: .fullname)
@@ -29,6 +31,7 @@ class RegistrationController: UIViewController {
         
         let textField = FormTextField(placeholder: "Password", isSecured: true)
         textField.delegate = self
+        textField.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
         return textField
     }()
     private lazy var passwordContainerView = FormFieldContainer(formTextField: passwordTextField, icon: .password)
@@ -59,11 +62,12 @@ class RegistrationController: UIViewController {
     
     private var activeTextField: UITextField? = nil
     
+    private var viewModel = RegistrationViewModel()
+    
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,13 +76,26 @@ class RegistrationController: UIViewController {
     }
     
     deinit {
-      NotificationCenter.default.removeObserver(self, name:  UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name:  UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name:  UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     // MARK: - Selectors
     @objc private func signupHandler(){
-        print("DEBUG: sign up")
+        guard let email = emailTextField.text,
+              let password = passwordTextField.text,
+              let fullname = fullnameTextField.text,
+              let userType = userTypeSegmentedControl.titleForSegment(at: userTypeSegmentedControl.selectedSegmentIndex)  else {return}
+        
+        let newUser = NewUser(email: email, fullname: fullname, userType: userType, password: password)
+        
+        AuthService.signupNewUser(newUser) { [weak self] error in
+            if let error = error {
+                print("DEBUG: \(error.localizedDescription)")
+                return
+            }
+            self?.clearForm()
+        }
     }
     
     @objc private func alreadyHaveAnAccountHandler(){
@@ -88,27 +105,7 @@ class RegistrationController: UIViewController {
     @objc func keyboardWillShow(_ notification: Notification){
         
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-               let keyboardRectangle = keyboardFrame.cgRectValue
-            let keyboardHeight = keyboardRectangle.height
-            
-            let bounds = UIScreen.main.bounds
-            let screenHeight = bounds.size.height
-            
-            let textFieldParentViewOriginY = activeTextField!.superview!.frame.origin.y
-            let textFieldParentFrameHeight = activeTextField!.superview!.frame.height
-            
-            let topElementWithHeight = titleLabel.frame.height
-            let topElementPadding:CGFloat = 40
-    
-            let visibleUI = screenHeight - (CGFloat(textFieldParentViewOriginY) + CGFloat(textFieldParentFrameHeight) + CGFloat(topElementWithHeight) + CGFloat(topElementPadding))
-            
-            if visibleUI < keyboardHeight + 25 {
-                if view.frame.origin.y == 0 {
-                    
-                    let additionalHeight = abs(visibleUI - keyboardHeight) + 25
-                    self.view.frame.origin.y -= additionalHeight
-                }
-            }
+            adjustViewToFitKeyboard(keyboardFrame: keyboardFrame)
         }
     }
     
@@ -118,13 +115,61 @@ class RegistrationController: UIViewController {
         }
     }
     
+    @objc func textDidChange(_ sender: UITextField){
+        
+        print("DEBUG: did change")
+        
+        switch sender {
+        case emailTextField:
+            viewModel.email = sender.text
+        case fullnameTextField:
+            viewModel.fullname = sender.text
+        case passwordTextField:
+            viewModel.password = sender.text
+        default:
+            break
+        }
+        
+        sigupButton.isEnabled = viewModel.formIsValid
+    }
+    
     // MARK: - Helpers
     private func setupUI(){
         view.backgroundColor = .themeBlack
-        
         setupTitleLabel()
         setupStack()
         setupAlreadyHaveAnAccountButton()
+    }
+    
+    private func clearForm(){
+        emailTextField.text = ""
+        fullnameTextField.text = ""
+        passwordTextField.text = ""
+        userTypeSegmentedControl.selectedSegmentIndex = 0
+    }
+    
+    private func adjustViewToFitKeyboard(keyboardFrame:NSValue){
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        
+        let bounds = UIScreen.main.bounds
+        let screenHeight = bounds.size.height
+        
+        let textFieldParentViewOriginY = activeTextField!.superview!.frame.origin.y
+        let textFieldParentFrameHeight = activeTextField!.superview!.frame.height
+        
+        let topElementWithHeight = titleLabel.frame.height
+        let topElementPadding:CGFloat = 40
+        
+        let visibleUI = screenHeight - (CGFloat(textFieldParentViewOriginY) + CGFloat(textFieldParentFrameHeight) + CGFloat(topElementWithHeight) + CGFloat(topElementPadding))
+        
+        if visibleUI < keyboardHeight + 25 {
+            if view.frame.origin.y == 0 {
+                
+                let additionalHeight = abs(visibleUI - keyboardHeight) + 25
+                self.view.frame.origin.y -= additionalHeight
+            }
+        }
     }
     
     private func setupTitleLabel(){
@@ -176,4 +221,5 @@ extension RegistrationController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         activeTextField = nil
     }
+    
 }

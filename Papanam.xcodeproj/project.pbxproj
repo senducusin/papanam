@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -22,7 +22,11 @@
 		A690FADD263CF61D005F1C98 /* FormAttributedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */; };
 		A690FADF263CFC86005F1C98 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FADE263CFC86005F1C98 /* RegistrationController.swift */; };
 		A690FAE1263CFE0D005F1C98 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */; };
-		A6B62DBB263F8229008BB0EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6B62DBA263F8229008BB0EB /* GoogleService-Info.plist */; };
+		A6B62DBE263F8746008BB0EB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DBD263F8746008BB0EB /* AuthService.swift */; };
+		A6B62DC1263F8783008BB0EB /* NewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC0263F8783008BB0EB /* NewUser.swift */; };
+		A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */; };
+		A6B62DC5263F9240008BB0EB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A6B62DC4263F9240008BB0EB /* GoogleService-Info.plist */; };
+		A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,7 +49,11 @@
 		A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAttributedButton.swift; sourceTree = "<group>"; };
 		A690FADE263CFC86005F1C98 /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
 		A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
-		A6B62DBA263F8229008BB0EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A6B62DBD263F8746008BB0EB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		A6B62DC0263F8783008BB0EB /* NewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUser.swift; sourceTree = "<group>"; };
+		A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
+		A6B62DC4263F9240008BB0EB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +97,9 @@
 		A690FAB4263CDBAD005F1C98 /* Papanam */ = {
 			isa = PBXGroup;
 			children = (
+				A6B62DC6263F9565008BB0EB /* ViewModels */,
+				A6B62DBF263F8772008BB0EB /* Models */,
+				A6B62DBC263F8731008BB0EB /* Services */,
 				A690FAD1263CEA96005F1C98 /* Views */,
 				A690FACC263CDDE4005F1C98 /* Extensions */,
 				A690FAC9263CDCD4005F1C98 /* Controllers */,
@@ -97,7 +108,7 @@
 				A690FABE263CDBAE005F1C98 /* Assets.xcassets */,
 				A690FAC0263CDBAE005F1C98 /* LaunchScreen.storyboard */,
 				A690FAC3263CDBAE005F1C98 /* Info.plist */,
-				A6B62DBA263F8229008BB0EB /* GoogleService-Info.plist */,
+				A6B62DC4263F9240008BB0EB /* GoogleService-Info.plist */,
 			);
 			path = Papanam;
 			sourceTree = "<group>";
@@ -118,6 +129,7 @@
 				A690FACF263CDFD0005F1C98 /* UIColor+Extensions.swift */,
 				A690FAD6263CED0F005F1C98 /* UIImage+Extensions.swift */,
 				A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */,
+				A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -133,13 +145,36 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		A6B62DBC263F8731008BB0EB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A6B62DBD263F8746008BB0EB /* AuthService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A6B62DBF263F8772008BB0EB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A6B62DC0263F8783008BB0EB /* NewUser.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A6B62DC6263F9565008BB0EB /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		BC65EB6C6B31E047EDE7E4AB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				2605A12B7A5AC82D956F0CDD /* Pods-Papanam.debug.xcconfig */,
 				43AB806A337280800B293647 /* Pods-Papanam.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -204,7 +239,7 @@
 			files = (
 				A690FAC2263CDBAE005F1C98 /* LaunchScreen.storyboard in Resources */,
 				A690FABF263CDBAE005F1C98 /* Assets.xcassets in Resources */,
-				A6B62DBB263F8229008BB0EB /* GoogleService-Info.plist in Resources */,
+				A6B62DC5263F9240008BB0EB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,12 +298,16 @@
 				A690FAD3263CEB0A005F1C98 /* FormTextField.swift in Sources */,
 				A690FAD0263CDFD0005F1C98 /* UIColor+Extensions.swift in Sources */,
 				A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */,
+				A6B62DBE263F8746008BB0EB /* AuthService.swift in Sources */,
+				A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */,
 				A690FAD5263CEC0C005F1C98 /* FormFieldContainer.swift in Sources */,
 				A690FADF263CFC86005F1C98 /* RegistrationController.swift in Sources */,
 				A690FADB263CF4E0005F1C98 /* FormButton.swift in Sources */,
 				A690FACE263CDDFA005F1C98 /* UIView+Extensions.swift in Sources */,
 				A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */,
+				A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */,
 				A690FAD7263CED0F005F1C98 /* UIImage+Extensions.swift in Sources */,
+				A6B62DC1263F8783008BB0EB /* NewUser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

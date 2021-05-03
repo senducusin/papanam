@@ -16,9 +16,13 @@ class FormTextField: UITextField {
         textColor = .white
         keyboardAppearance = .dark
         isSecureTextEntry = isSecured
-        textContentType = .none
         attributedPlaceholder = NSAttributedString(string: placeholder,attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         isEnabled = true
+        autocorrectionType = .no
+        autocapitalizationType = .none
+        if #available(iOS 12.0, *) {
+            textContentType = .oneTimeCode
+        }
     }
     
     required init?(coder: NSCoder) {

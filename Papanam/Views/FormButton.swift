@@ -25,6 +25,8 @@ class FormButton: UIButton {
         layer.cornerRadius = 5
         setHeight(height: 50)
         titleLabel?.font = .boldSystemFont(ofSize: 18)
+        isEnabled = false
+        setTitleColor(UIColor(white: 1, alpha: 0.37), for: .disabled)
     }
     
     required init?(coder: NSCoder) {
