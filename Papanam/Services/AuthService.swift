@@ -19,6 +19,8 @@ enum AuthServiceError: Error {
 class AuthService {
     static let dbUserReference = Database.database().reference().child("users")
     
+    
+    // MARK: - Create New User
     static func signupNewUser(_ newUser: NewUser, completion:@escaping errorCompletion){
         guard let password = newUser.password else {
             completion(AuthServiceError.passwordIsEmpty)
@@ -49,8 +51,9 @@ class AuthService {
         }
     }
     
+    
+    // MARK: - Login
     static func loginUserWith(email:String, password:String, completion:@escaping errorCompletion){
-        
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if let error = error {
                 completion(error)
@@ -59,5 +62,25 @@ class AuthService {
             
             completion(nil)
         }
+    }
+    
+    // MARK: - Logout
+    static func signOut(completion:@escaping errorCompletion){
+        do{
+            try Auth.auth().signOut()
+            completion(nil)
+        }catch{
+            completion(error)
+        }
+        
+    }
+    
+    // MARK: - isLoggedIn
+    static func isUserLoggedIn() -> Bool {
+        if Auth.auth().currentUser?.uid == nil {
+            return false
+        }
+        
+        return true
     }
 }

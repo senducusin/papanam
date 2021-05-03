@@ -93,4 +93,12 @@ extension UIView {
         translatesAutoresizingMaskIntoConstraints = false
         anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: padding, paddingLeft: padding, paddingBottom: padding, paddingRight: padding, width: 0, height: 0)
     }
+    
+    func addShadow(){
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.45
+        layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        layer.shadowRadius = 7
+        layer.masksToBounds = false
+    }
 }

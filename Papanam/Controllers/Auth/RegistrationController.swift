@@ -95,6 +95,7 @@ class RegistrationController: UIViewController {
                 return
             }
             self?.clearForm()
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     

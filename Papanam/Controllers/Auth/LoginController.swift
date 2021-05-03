@@ -60,8 +60,8 @@ class LoginController:UIViewController {
                 return
             }
             
-            print("DEBUG: Successfully logged in")
             self?.clearForm()
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     
