@@ -32,17 +32,33 @@ class HomeController:UIViewController {
         super.viewWillAppear(animated)
         if viewModel.shouldSetupUI() {
             // == Add a preloader here ==
-            AuthService.shared.fetchUserDataWith { [weak self] result in
-                switch result {
-                case .success(let user):
-                    self?.configure(user: user)
+            fetchCurrentUserData()
+        }
+    }
+    
+    // MARK: - API
+    private func fetchDrivers(){
+        FirebaseService.shared.fetchDrivers { [weak self] result in
+            switch result {
+            case .success(let user):
+                self?.setupDriver(user: user)
+            case .failure(let error):
+                print("DEBUG: \(error)")
+            }
+        }
+    }
+    
+    private func fetchCurrentUserData(){
+        FirebaseService.shared.fetchCurrentUserData { [weak self] result in
+            switch result {
+            case .success(let user):
+                self?.configure(user: user)
 //                    AuthService.shared.signOut { error in
 //                        print(error?.localizedDescription)
 //                    }
-                    print("DEBUG: \(LocationService.shared.location)")
-                case .failure(let error):
-                    print("DEBUG: \(error.localizedDescription)")
-                }
+                self?.fetchDrivers()
+            case .failure(let error):
+                print("DEBUG: \(error.localizedDescription)")
             }
         }
     }
@@ -53,6 +69,12 @@ class HomeController:UIViewController {
         locationInputView.user = user
         setupUI()
         LocationService.shared.enableLocationServices()
+    }
+    
+    private func setupDriver(user: User){
+        guard let coordinate = user.location?.coordinate else {return}
+        let annotation = DriverAnnotation(uid: user.uid, coordinate: coordinate)
+        mapView.addAnnotation(annotation)
     }
     
     private func setupUI(){

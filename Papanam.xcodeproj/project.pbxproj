@@ -10,6 +10,9 @@
 		4B90C82332896B992C13F081 /* Pods_Papanam.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7504795B2F93CBD9C554EC90 /* Pods_Papanam.framework */; };
 		A64A7A9B2640D1BF009FBF48 /* LocationInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7A9A2640D1BF009FBF48 /* LocationInputCell.swift */; };
 		A64A7A9F2640EF9D009FBF48 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7A9E2640EF9D009FBF48 /* LocationService.swift */; };
+		A64A7AA126411531009FBF48 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA026411531009FBF48 /* FirebaseService.swift */; };
+		A64A7AA3264115A7009FBF48 /* Database+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA2264115A7009FBF48 /* Database+Extensions.swift */; };
+		A64A7AA526411E99009FBF48 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA426411E99009FBF48 /* DriverAnnotation.swift */; };
 		A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAB5263CDBAD005F1C98 /* AppDelegate.swift */; };
 		A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAB7263CDBAD005F1C98 /* SceneDelegate.swift */; };
 		A690FABF263CDBAE005F1C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A690FABE263CDBAE005F1C98 /* Assets.xcassets */; };
@@ -44,6 +47,9 @@
 		7504795B2F93CBD9C554EC90 /* Pods_Papanam.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Papanam.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A64A7A9A2640D1BF009FBF48 /* LocationInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputCell.swift; sourceTree = "<group>"; };
 		A64A7A9E2640EF9D009FBF48 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		A64A7AA026411531009FBF48 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		A64A7AA2264115A7009FBF48 /* Database+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Extensions.swift"; sourceTree = "<group>"; };
+		A64A7AA426411E99009FBF48 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		A690FAB2263CDBAD005F1C98 /* Papanam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Papanam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A690FAB5263CDBAD005F1C98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A690FAB7263CDBAD005F1C98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -169,6 +175,7 @@
 				A690FAD6263CED0F005F1C98 /* UIImage+Extensions.swift */,
 				A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */,
 				A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */,
+				A64A7AA2264115A7009FBF48 /* Database+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -188,6 +195,7 @@
 			children = (
 				A6B62DBD263F8746008BB0EB /* AuthService.swift */,
 				A64A7A9E2640EF9D009FBF48 /* LocationService.swift */,
+				A64A7AA026411531009FBF48 /* FirebaseService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -197,6 +205,7 @@
 			children = (
 				A6B62DC0263F8783008BB0EB /* NewUser.swift */,
 				A6B62DCB263F9D46008BB0EB /* User.swift */,
+				A64A7AA426411E99009FBF48 /* DriverAnnotation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -347,6 +356,7 @@
 				A690FACB263CDD75005F1C98 /* LoginController.swift in Sources */,
 				A690FADD263CF61D005F1C98 /* FormAttributedButton.swift in Sources */,
 				A64A7A9B2640D1BF009FBF48 /* LocationInputCell.swift in Sources */,
+				A64A7AA526411E99009FBF48 /* DriverAnnotation.swift in Sources */,
 				A6B62DD1263FCE03008BB0EB /* HomeViewModel.swift in Sources */,
 				A690FAD3263CEB0A005F1C98 /* FormTextField.swift in Sources */,
 				A690FAD0263CDFD0005F1C98 /* UIColor+Extensions.swift in Sources */,
@@ -362,7 +372,9 @@
 				A690FACE263CDDFA005F1C98 /* UIView+Extensions.swift in Sources */,
 				A64A7A9F2640EF9D009FBF48 /* LocationService.swift in Sources */,
 				A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */,
+				A64A7AA3264115A7009FBF48 /* Database+Extensions.swift in Sources */,
 				A6B62DCC263F9D46008BB0EB /* User.swift in Sources */,
+				A64A7AA126411531009FBF48 /* FirebaseService.swift in Sources */,
 				A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */,
 				A690FAD7263CED0F005F1C98 /* UIImage+Extensions.swift in Sources */,
 				A6B62DCE263FC779008BB0EB /* HomeController.swift in Sources */,

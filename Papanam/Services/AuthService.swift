@@ -23,9 +23,7 @@ enum AuthServiceError: Error {
 class AuthService {
     
     static let shared = AuthService()
-    private let dbRef = Database.database().reference()
-    private let dbUserRef = Database.database().reference().child("users")
-    private let dbDriverLocationRef = Database.database().reference().child("driver-locations")
+
     
 }
 
@@ -33,7 +31,7 @@ extension AuthService {
     // MARK: - Create New User
     public func signupNewUser(_ newUser: NewUser, completion:@escaping errorCompletion){
         
-        let ref = self.dbDriverLocationRef
+        let ref = Database.refDriverLocations
         
         guard let password = newUser.password,
               let location = LocationService.shared.location else {
@@ -47,7 +45,7 @@ extension AuthService {
             return
         }
         
-        Auth.auth().createUser(withEmail: newUser.email, password: password) { [weak self] result, error in
+        Auth.auth().createUser(withEmail: newUser.email, password: password) { result, error in
             if let error = error {
                 completion(error)
                 return
@@ -69,11 +67,11 @@ extension AuthService {
             if newUser.userType == .driver {
                 let geoFire = GeoFire(firebaseRef: ref)
                 geoFire.setLocation(location, forKey: uid) { error in
-                    self?.dbUserRef.child(uid).updateChildValues(newUserDictionary)
+                    Database.refUsers.child(uid).updateChildValues(newUserDictionary)
                     completion(nil)
                 }
             }else{
-                self?.dbUserRef.child(uid).updateChildValues(newUserDictionary)
+                Database.refUsers.child(uid).updateChildValues(newUserDictionary)
                 completion(nil)
             }
         }
@@ -108,26 +106,5 @@ extension AuthService {
         guard Auth.auth().currentUser?.uid != nil else {return false}
         
         return true
-    }
-    
-    // MARK: - Fetch User
-    public func fetchUserDataWith(completion:@escaping userOrErrorCompletion){
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion(.failure(.userNotFound))
-            return
-        }
-        
-        dbUserRef.child(uid).observeSingleEvent(of: .value) { snapshot in
-            
-            if let userDictionary = snapshot.value as? jsonDictionary {
-                guard let user = User(userDictionary) else {
-                    completion(.failure(.userNotFound))
-                    return
-                }
-                completion(.success(user))
-            }else{
-                completion(.failure(.userNotFound))
-            }
-        }
     }
 }
