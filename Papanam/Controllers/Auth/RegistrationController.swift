@@ -67,6 +67,7 @@ class RegistrationController: UIViewController {
     // MARK: - Lifecycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        LocationService.shared.enableLocationServices()
         setupUI()
     }
     
@@ -89,7 +90,7 @@ class RegistrationController: UIViewController {
         
         let newUser = NewUser(email: email, fullname: fullname, userType: userType, password: password)
         
-        AuthService.signupNewUser(newUser) { [weak self] error in
+        AuthService.shared.signupNewUser(newUser) { [weak self] error in
             if let error = error {
                 print("DEBUG: \(error.localizedDescription)")
                 return

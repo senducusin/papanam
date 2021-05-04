@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4B90C82332896B992C13F081 /* Pods_Papanam.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7504795B2F93CBD9C554EC90 /* Pods_Papanam.framework */; };
+		A64A7A9B2640D1BF009FBF48 /* LocationInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7A9A2640D1BF009FBF48 /* LocationInputCell.swift */; };
+		A64A7A9F2640EF9D009FBF48 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7A9E2640EF9D009FBF48 /* LocationService.swift */; };
 		A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAB5263CDBAD005F1C98 /* AppDelegate.swift */; };
 		A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAB7263CDBAD005F1C98 /* SceneDelegate.swift */; };
 		A690FABF263CDBAE005F1C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A690FABE263CDBAE005F1C98 /* Assets.xcassets */; };
@@ -40,6 +42,8 @@
 		2605A12B7A5AC82D956F0CDD /* Pods-Papanam.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Papanam.debug.xcconfig"; path = "Target Support Files/Pods-Papanam/Pods-Papanam.debug.xcconfig"; sourceTree = "<group>"; };
 		43AB806A337280800B293647 /* Pods-Papanam.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Papanam.release.xcconfig"; path = "Target Support Files/Pods-Papanam/Pods-Papanam.release.xcconfig"; sourceTree = "<group>"; };
 		7504795B2F93CBD9C554EC90 /* Pods_Papanam.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Papanam.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A64A7A9A2640D1BF009FBF48 /* LocationInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputCell.swift; sourceTree = "<group>"; };
+		A64A7A9E2640EF9D009FBF48 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		A690FAB2263CDBAD005F1C98 /* Papanam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Papanam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A690FAB5263CDBAD005F1C98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A690FAB7263CDBAD005F1C98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +92,27 @@
 				7504795B2F93CBD9C554EC90 /* Pods_Papanam.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A64A7A9C2640DA68009FBF48 /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				A690FAD2263CEB0A005F1C98 /* FormTextField.swift */,
+				A690FAD4263CEC0C005F1C98 /* FormFieldContainer.swift */,
+				A690FADA263CF4E0005F1C98 /* FormButton.swift */,
+				A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */,
+			);
+			path = Form;
+			sourceTree = "<group>";
+		};
+		A64A7A9D2640DA8A009FBF48 /* LocationInput */ = {
+			isa = PBXGroup;
+			children = (
+				A6B62DD4263FF33B008BB0EB /* LocationInputView.swift */,
+				A6B62DD6263FFE31008BB0EB /* LocationInputTextField.swift */,
+				A64A7A9A2640D1BF009FBF48 /* LocationInputCell.swift */,
+			);
+			path = LocationInput;
 			sourceTree = "<group>";
 		};
 		A690FAA9263CDBAD005F1C98 = {
@@ -151,13 +176,9 @@
 		A690FAD1263CEA96005F1C98 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A690FAD2263CEB0A005F1C98 /* FormTextField.swift */,
-				A690FAD4263CEC0C005F1C98 /* FormFieldContainer.swift */,
-				A690FADA263CF4E0005F1C98 /* FormButton.swift */,
-				A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */,
+				A64A7A9D2640DA8A009FBF48 /* LocationInput */,
+				A64A7A9C2640DA68009FBF48 /* Form */,
 				A6B62DD2263FE0B2008BB0EB /* LocationInputActivationView.swift */,
-				A6B62DD4263FF33B008BB0EB /* LocationInputView.swift */,
-				A6B62DD6263FFE31008BB0EB /* LocationInputTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -166,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				A6B62DBD263F8746008BB0EB /* AuthService.swift */,
+				A64A7A9E2640EF9D009FBF48 /* LocationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -324,6 +346,7 @@
 				A690FAE1263CFE0D005F1C98 /* UILabel+Extensions.swift in Sources */,
 				A690FACB263CDD75005F1C98 /* LoginController.swift in Sources */,
 				A690FADD263CF61D005F1C98 /* FormAttributedButton.swift in Sources */,
+				A64A7A9B2640D1BF009FBF48 /* LocationInputCell.swift in Sources */,
 				A6B62DD1263FCE03008BB0EB /* HomeViewModel.swift in Sources */,
 				A690FAD3263CEB0A005F1C98 /* FormTextField.swift in Sources */,
 				A690FAD0263CDFD0005F1C98 /* UIColor+Extensions.swift in Sources */,
@@ -337,6 +360,7 @@
 				A6B62DCA263F9AA7008BB0EB /* LoginViewModel.swift in Sources */,
 				A690FADB263CF4E0005F1C98 /* FormButton.swift in Sources */,
 				A690FACE263CDDFA005F1C98 /* UIView+Extensions.swift in Sources */,
+				A64A7A9F2640EF9D009FBF48 /* LocationService.swift in Sources */,
 				A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */,
 				A6B62DCC263F9D46008BB0EB /* User.swift in Sources */,
 				A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */,

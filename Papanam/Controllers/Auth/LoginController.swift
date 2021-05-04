@@ -54,7 +54,7 @@ class LoginController:UIViewController {
         guard let email = viewModel.email,
               let password = viewModel.password else {return}
         
-        AuthService.loginUserWith(email: email, password: password) { [weak self] error in
+        AuthService.shared.loginUserWith(email: email, password: password) { [weak self] error in
             if let error = error{
                 print("DEBUG: \(error.localizedDescription)")
                 return

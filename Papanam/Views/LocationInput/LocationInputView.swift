@@ -48,19 +48,23 @@ class LocationInputView: UIView {
     
     private lazy var startingLocationTextfield: LocationInputTextField = {
         let textField = LocationInputTextField(placeholder: "Current Location")
-        textField.backgroundColor = .lightGray
+        textField.backgroundColor = .themeLightGray
         textField.isEnabled = false
         return textField
     }()
     
     private lazy var destinationLocationTextfield: LocationInputTextField = {
         let textField = LocationInputTextField(placeholder: "Enter a destination")
-        textField.backgroundColor = .darkGray
+        textField.backgroundColor = .themeDarkGray
         textField.returnKeyType = .search
-        textField.textColor = .white
-        // change place holder text color
         return textField
     }()
+    
+    var user: User? {
+        didSet {
+            configure()
+        }
+    }
     
     weak var delegate: LocationInputViewDelegate?
     
@@ -130,5 +134,10 @@ class LocationInputView: UIView {
         addSubview(linkingView)
         linkingView.centerX(inView: startLocationIndicatorView)
         linkingView.anchor(top:startLocationIndicatorView.bottomAnchor, bottom: destinationIndicatorView.topAnchor, paddingTop: 4, paddingBottom: 4, width: 0.5)
+    }
+    
+    private func configure(){
+        guard let user = user else {return}
+        titleLabel.text = user.fullname
     }
 }
