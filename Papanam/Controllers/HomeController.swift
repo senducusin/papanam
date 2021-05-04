@@ -53,9 +53,9 @@ class HomeController:UIViewController {
             switch result {
             case .success(let user):
                 self?.configure(user: user)
-//                    AuthService.shared.signOut { error in
-//                        print(error?.localizedDescription)
-//                    }
+                //                    AuthService.shared.signOut { error in
+                //                        print(error?.localizedDescription)
+                //                    }
                 self?.fetchDrivers()
             case .failure(let error):
                 print("DEBUG: \(error.localizedDescription)")
@@ -90,6 +90,7 @@ class HomeController:UIViewController {
         mapView.frame = view.frame
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .follow
+        mapView.delegate = self
     }
     
     private func setupInputActivationView(){
@@ -208,4 +209,17 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource{
         return cell
     }
     
+}
+
+// MARK: - MKMapViewDelegate Delegate
+extension HomeController: MKMapViewDelegate{
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if let annotation = annotation as? DriverAnnotation {
+            let view = MKAnnotationView(annotation: annotation, reuseIdentifier: MKAnnotationView.driverAnnotationIdentifier)
+            view.image = UIImage(systemName: "chevron.right.circle.fill")?.withRenderingMode(.alwaysOriginal)
+            return view
+        }
+        
+        return nil
+    }
 }
