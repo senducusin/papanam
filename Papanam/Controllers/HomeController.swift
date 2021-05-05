@@ -51,6 +51,8 @@ class HomeController:UIViewController {
     
     // MARK: - API
     private func fetchDrivers(){
+        guard viewModel.user?.userType == .passenger else {return}
+        
         FirebaseService.shared.fetchDrivers { [weak self] result in
             switch result {
             case .success(let user):
@@ -66,9 +68,9 @@ class HomeController:UIViewController {
             switch result {
             case .success(let user):
                 self?.configure(user: user)
-                //                                    AuthService.shared.signOut { error in
-                //                                        print(error?.localizedDescription)
-                //                                    }
+//                                                    AuthService.shared.signOut { error in
+//                                                        print(error?.localizedDescription)
+//                                                    }
                 self?.fetchDrivers()
             case .failure(let error):
                 print("DEBUG: \(error.localizedDescription)")
@@ -91,6 +93,21 @@ class HomeController:UIViewController {
         UIView.animate(withDuration: viewModel.animationDuration) {
             self.rideActionView.frame.origin.y = self.viewModel.getRideActionViewOriginY(present: present)
         }
+    }
+    
+    private func configureDestination(_ placemark:MKPlacemark){
+        addAnnotationWithSelectedPlacemark(placemark)
+        
+        let destination = MKMapItem(placemark: placemark)
+        generatePolyline(toDestination: destination)
+        
+        focusToRegionOfAnnotations()
+        presentRideActionView(withPlacemark: placemark)
+    }
+    
+    private func presentRideActionView(withPlacemark placemark:MKPlacemark){
+        rideActionView.placemark = placemark
+        shouldPresentRideActionView(true)
     }
     
     private func configure(user:User){
@@ -120,10 +137,14 @@ class HomeController:UIViewController {
         view.backgroundColor = .white
         setupMapView()
         setupActionButton()
-        setupInputActivationView()
-        animateInputActivationView()
-        setupTableView()
+        setupUiForPassenger()
         setupRideActionView()
+    }
+    
+    private func setupUiForPassenger(){
+        guard viewModel.user?.userType == .passenger else {return}
+        setupInputActivationView()
+        setupTableView()
     }
     
     private func setupMapView(){
@@ -141,6 +162,8 @@ class HomeController:UIViewController {
         inputActivationView.anchor(top:actionButton.bottomAnchor, paddingTop: 16)
         inputActivationView.alpha = 0
         inputActivationView.delegate = self
+        
+        animateInputActivationView()
     }
     
     private func setupActionButton(){
@@ -151,6 +174,7 @@ class HomeController:UIViewController {
     private func setupRideActionView(){
         view.addSubview(rideActionView)
         rideActionView.frame = CGRect(x: 0, y: viewModel.rideActionViewStartingOriginY, width: viewModel.rideActionViewWidth, height: viewModel.rideActionViewHeight)
+        rideActionView.delegate = self
     }
     
     private func setupTableView(){
@@ -297,17 +321,12 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let placemark = viewModel.placemarkAt(index: indexPath.row)
+        let destination = viewModel.placemarkAt(index: indexPath.row)
         
         updateActionButtonConfig(.dismissActionView)
         
         dismissLocationView { [weak self] _ in
-            self?.addAnnotationWithSelectedPlacemark(placemark)
-            
-            let destination = MKMapItem(placemark: placemark)
-            self?.generatePolyline(toDestination: destination)
-            self?.focusToRegionOfAnnotations()
-            self?.shouldPresentRideActionView(true)
+            self?.configureDestination(destination)
         }
     }
 }
@@ -396,5 +415,25 @@ extension HomeController: MKMapViewDelegate{
         
         mapView.showAnnotations(annotations, animated: true)
     }
+    
+}
+
+// MARK: - RideActionView Delegate
+extension HomeController: RideActionViewDelegate {
+    func uploadTrip(_ view: RideActionView) {
+        guard let pickupCoordinates = LocationService.shared.location?.coordinate,
+              let destinationCoordinates = view.placemark?.coordinate else {return}
+        
+        FirebaseService.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { error, ref in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            print("DEBUG did upload trip successfully")
+        }
+    }
+
+    
     
 }

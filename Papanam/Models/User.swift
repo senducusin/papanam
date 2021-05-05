@@ -8,6 +8,11 @@
 import Foundation
 import CoreLocation
 
+enum UserType:Int, Encodable {
+    case passenger
+    case driver
+}
+
 struct User{
     let uid: String
     let email: String

@@ -7,10 +7,6 @@
 
 import Foundation
 
-enum UserType:Int, Encodable {
-    case rider
-    case driver
-}
 
 struct NewUser:Encodable{
     let email: String

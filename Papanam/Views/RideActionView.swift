@@ -6,9 +6,22 @@
 //
 
 import UIKit
+import MapKit
+
+protocol RideActionViewDelegate: AnyObject {
+    func uploadTrip(_ view:RideActionView)
+}
 
 class RideActionView: UIView {
     // MARK: - Properties
+    var placemark: MKPlacemark? {
+        didSet {
+            configure()
+        }
+    }
+    
+    weak var delegate: RideActionViewDelegate?
+    
     private let papanamLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Light", size: 20)
@@ -69,7 +82,7 @@ class RideActionView: UIView {
     private lazy var confirmButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .black
-        button.setTitle("CONFIRM PAPANAM", for: .normal)
+        button.setTitle("CONFIRM DESTINATION", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 18)
         button.addTarget(self, action: #selector(confirmHandler), for: .touchUpInside)
@@ -88,10 +101,15 @@ class RideActionView: UIView {
     
     // MARK: - Selector
     @objc private func confirmHandler(){
-        print("DEBUG: confirm")
+        delegate?.uploadTrip(self)
     }
     
     // MARK: - Helpers
+    private func configure(){
+        titleLabel.text = placemark?.name
+        addressLabel.text = placemark?.address
+    }
+    
     private func setupUI(){
         backgroundColor = .white
         addShadow()

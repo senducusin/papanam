@@ -12,4 +12,5 @@ extension Database {
     static let refRoot = Database.database().reference()
     static let refUsers = Database.database().reference().child("users")
     static let refDriverLocations = Database.database().reference().child("driver-locations")
+    static let refTrips = Database.database().reference().child("trips")
 }

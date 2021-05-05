@@ -56,4 +56,21 @@ extension FirebaseService {
             })
         }
     }
+    
+    // MARK: - Upload trip
+    public func uploadTrip(_ pickupCoordinates: CLLocationCoordinate2D, _ destinationCoordinates: CLLocationCoordinate2D, completion:@escaping(Error?, DatabaseReference)->()){
+        
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let pickupArray = [pickupCoordinates.latitude, pickupCoordinates.longitude]
+        let destinationArray = [destinationCoordinates.latitude, destinationCoordinates.longitude]
+        
+        let values = [
+            "pickupCoordinates": pickupArray,
+            "destinationCoordinates": destinationArray,
+            "state": TripState.requested.rawValue
+        ] as [String : Any]
+        
+        Database.refTrips.child(uid).updateChildValues(values,withCompletionBlock: completion)
+    }
 }
