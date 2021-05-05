@@ -9,11 +9,36 @@ import Foundation
 import MapKit
 
 class DriverAnnotation: NSObject, MKAnnotation{
-    var coordinate: CLLocationCoordinate2D
+    dynamic var coordinate: CLLocationCoordinate2D
     var uid: String
     
     init(uid:String, coordinate: CLLocationCoordinate2D){
         self.uid = uid
         self.coordinate = coordinate
+    }
+    
+    private func isNewCoordinate(_ coordinate:CLLocationCoordinate2D) -> Bool{
+        if self.coordinate.latitude == coordinate.latitude &&
+            self.coordinate.longitude == coordinate.longitude {
+           
+            return false
+        }
+        
+        return true
+    }
+
+}
+
+extension DriverAnnotation {
+    public func updateAnnotationPosition(withCoordinate coordinate: CLLocationCoordinate2D){
+        
+        if !isNewCoordinate(coordinate){
+            return
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            print("DEBUG: current coordinate: \(self.coordinate) | new coordinate: \(coordinate)")
+            self.coordinate = coordinate
+        }
     }
 }

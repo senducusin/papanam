@@ -6,10 +6,17 @@
 //
 
 import UIKit
+import MapKit
 
 class LocationInputCell: UITableViewCell {
     // MARK: - Properties
     static let cellIdentifier = "LocationInputCell"
+    
+    var placemark: MKPlacemark? {
+        didSet {
+            configure()
+        }
+    }
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -47,5 +54,10 @@ class LocationInputCell: UITableViewCell {
         stack.spacing = 4
         addSubview(stack)
         stack.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 17)
+    }
+    
+    private func configure(){
+        titleLabel.text = placemark?.name
+        addressLabel.text = placemark?.address
     }
 }

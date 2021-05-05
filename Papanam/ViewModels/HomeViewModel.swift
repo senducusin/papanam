@@ -6,20 +6,21 @@
 //
 
 import UIKit
+import MapKit
 
 struct HomeViewModel {
     
     let homeView: UIView
-    var user: User? = nil
     let locationInputViewHeight:CGFloat = 200
     let animationDuration:Double = 0.3
     
+    var user: User? = nil
+    var searchResults = [MKPlacemark]()
     var alreadySetupUI = false
-
+    
     mutating func shouldSetupUI() -> Bool {
         
         if !alreadySetupUI && AuthService.shared.isUserLoggedIn() {
-            print("DEBUG: user found!")
             self.alreadySetupUI.toggle()
             return true
         }
@@ -47,6 +48,39 @@ extension HomeViewModel {
     
     var tableViewHeight: CGFloat {
         return homeView.frame.height - locationInputViewHeight
+    }
+    
+    var numberOfRowsForSearchResult: Int {
+        return searchResults.count
+    }
+    
+    public func placemarkAt(index:Int) -> MKPlacemark {
+        return searchResults[index]
+    }
+}
+
+// MARK: MapView
+extension HomeViewModel {
+    public func driverIsVisible(mapView: MKMapView, user:User) -> DriverAnnotation?{
+        var driverAnnotation: DriverAnnotation? = nil
+        
+        var isVisible:Bool {
+            return mapView.annotations.contains { annotation in
+                guard let driverAnno = annotation as? DriverAnnotation else {return false}
+                
+                if driverAnno.uid == user.uid {
+                    driverAnnotation = driverAnno
+                    return true
+                }
+                return false
+            }
+        }
+        
+        if !isVisible {
+            return nil
+        }
+        
+        return driverAnnotation
     }
 }
 

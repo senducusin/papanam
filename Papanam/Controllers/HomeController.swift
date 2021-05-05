@@ -53,9 +53,9 @@ class HomeController:UIViewController {
             switch result {
             case .success(let user):
                 self?.configure(user: user)
-                //                    AuthService.shared.signOut { error in
-                //                        print(error?.localizedDescription)
-                //                    }
+//                                    AuthService.shared.signOut { error in
+//                                        print(error?.localizedDescription)
+//                                    }
                 self?.fetchDrivers()
             case .failure(let error):
                 print("DEBUG: \(error.localizedDescription)")
@@ -71,10 +71,17 @@ class HomeController:UIViewController {
         LocationService.shared.enableLocationServices()
     }
     
-    private func setupDriver(user: User){
-        guard let coordinate = user.location?.coordinate else {return}
-        let annotation = DriverAnnotation(uid: user.uid, coordinate: coordinate)
-        mapView.addAnnotation(annotation)
+    private func setupDriver(user driver: User){
+        guard let coordinate = driver.location?.coordinate else {return}
+       
+        if let existingDriverAnnotation = viewModel.driverIsVisible(mapView: mapView, user: driver) {
+            
+            existingDriverAnnotation.updateAnnotationPosition(withCoordinate: coordinate)
+
+        }else{
+            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
+            mapView.addAnnotation(annotation)
+        }
     }
     
     private func setupUI(){
@@ -109,6 +116,7 @@ class HomeController:UIViewController {
         tableView.register(LocationInputCell.self, forCellReuseIdentifier: LocationInputCell.cellIdentifier)
         
         tableView.rowHeight = 60
+        tableView.keyboardDismissMode = .onDrag
         
         tableView.frame = CGRect(x: 0, y: viewModel.tableViewStartingOriginY, width: viewModel.tableViewWidth, height: viewModel.tableViewHeight)
         
@@ -173,6 +181,13 @@ extension HomeController: LocationInputActivationViewDelegate {
 
 // MARK: - LocationInputView Delegate & Helpers
 extension HomeController: LocationInputViewDelegate{
+    func executeSearch(query: String) {
+        searchBy(naturalLanguageQuery: query) { [weak self] placemarks in
+            self?.viewModel.searchResults = placemarks
+            self?.tableView.reloadData()
+        }
+    }
+    
     func dismissLocationInputView() {
         
         UIView.animate(withDuration: viewModel.animationDuration) {
@@ -187,12 +202,29 @@ extension HomeController: LocationInputViewDelegate{
             }
         }
     }
+    
+    func searchBy(naturalLanguageQuery: String, completion:@escaping([MKPlacemark])->()){
+        var results = [MKPlacemark]()
+        
+        let request = MKLocalSearch.Request()
+        request.region = mapView.region
+        request.naturalLanguageQuery = naturalLanguageQuery
+        
+        let search = MKLocalSearch(request: request)
+        search.start { response, error in
+            guard let response = response else {return}
+            response.mapItems.forEach { mapItem in
+                results.append(mapItem.placemark)
+            }
+            completion(results)
+        }
+    }
 }
 
 // MARK: - TableView Delegate, Datasource, and Helpers
 extension HomeController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "test"
+        return " "
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -200,18 +232,24 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : 1
+        return section == 0 ? 2 : viewModel.numberOfRowsForSearchResult
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: LocationInputCell.cellIdentifier, for: indexPath) as! LocationInputCell
+        
+        if indexPath.section == 1 {
+            cell.placemark = viewModel.placemarkAt(index: indexPath.row)
+        }else{
+            cell.placemark = nil
+        }
         
         return cell
     }
     
 }
 
-// MARK: - MKMapViewDelegate Delegate
+// MARK: - MKMapViewDelegate Delegate & Helpers
 extension HomeController: MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? DriverAnnotation {
