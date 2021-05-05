@@ -15,6 +15,7 @@
 		A64A7AA526411E99009FBF48 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA426411E99009FBF48 /* DriverAnnotation.swift */; };
 		A64A7AA72641231A009FBF48 /* MKAnnotationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA62641231A009FBF48 /* MKAnnotationView+Extensions.swift */; };
 		A68D458026422E0F000D969C /* MKPlacemark+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68D457F26422E0F000D969C /* MKPlacemark+Extensions.swift */; };
+		A68D45822642653E000D969C /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68D45812642653E000D969C /* RideActionView.swift */; };
 		A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAB5263CDBAD005F1C98 /* AppDelegate.swift */; };
 		A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAB7263CDBAD005F1C98 /* SceneDelegate.swift */; };
 		A690FABF263CDBAE005F1C98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A690FABE263CDBAE005F1C98 /* Assets.xcassets */; };
@@ -54,6 +55,7 @@
 		A64A7AA426411E99009FBF48 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		A64A7AA62641231A009FBF48 /* MKAnnotationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKAnnotationView+Extensions.swift"; sourceTree = "<group>"; };
 		A68D457F26422E0F000D969C /* MKPlacemark+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlacemark+Extensions.swift"; sourceTree = "<group>"; };
+		A68D45812642653E000D969C /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		A690FAB2263CDBAD005F1C98 /* Papanam.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Papanam.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A690FAB5263CDBAD005F1C98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A690FAB7263CDBAD005F1C98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				A64A7A9D2640DA8A009FBF48 /* LocationInput */,
 				A64A7A9C2640DA68009FBF48 /* Form */,
 				A6B62DD2263FE0B2008BB0EB /* LocationInputActivationView.swift */,
+				A68D45812642653E000D969C /* RideActionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -381,6 +384,7 @@
 				A64A7A9F2640EF9D009FBF48 /* LocationService.swift in Sources */,
 				A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */,
 				A64A7AA3264115A7009FBF48 /* Database+Extensions.swift in Sources */,
+				A68D45822642653E000D969C /* RideActionView.swift in Sources */,
 				A6B62DCC263F9D46008BB0EB /* User.swift in Sources */,
 				A64A7AA126411531009FBF48 /* FirebaseService.swift in Sources */,
 				A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */,

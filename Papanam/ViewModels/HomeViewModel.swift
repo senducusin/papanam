@@ -30,9 +30,11 @@ struct HomeViewModel {
     
     let homeView: UIView
     let locationInputViewHeight:CGFloat = 200
+//    let rideActionViewHeight:CGFloat = 300
     let animationDuration:Double = 0.3
     
     var user: User? = nil
+    var route: MKRoute? = nil
     var searchResults = [MKPlacemark]()
     var alreadySetupUI = false
     var actionButtonConfig = ActionButtonConfiguration()
@@ -52,6 +54,26 @@ struct HomeViewModel {
 extension HomeViewModel {
     var inputActivationViewWidth: CGFloat {
         return homeView.frame.width - 64
+    }
+}
+
+// MARK: - RideActionView
+extension HomeViewModel {
+    var rideActionViewStartingOriginY: CGFloat {
+        return homeView.frame.height
+    }
+    
+    var rideActionViewWidth: CGFloat {
+        return homeView.frame.width
+    }
+    
+    var rideActionViewHeight:CGFloat {
+        return 300
+    }
+    
+    public func getRideActionViewOriginY(present:Bool) -> CGFloat{
+        let height = present ? rideActionViewHeight : 0
+        return homeView.frame.height - height
     }
 }
 

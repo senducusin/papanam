@@ -13,6 +13,7 @@ class HomeController:UIViewController {
     private let mapView = MKMapView()
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
+    private let rideActionView = RideActionView()
     private let tableView = UITableView()
     
     private lazy var actionButton: UIButton = {
@@ -81,17 +82,17 @@ class HomeController:UIViewController {
         case .showMenu :
             break
         case .dismissActionView:
-            
-            removePlacemarkAnnotation()
-            
-            UIView.animate(withDuration: viewModel.animationDuration) {
-                self.inputActivationView.alpha = 1
-                self.updateActionButtonConfig(.showMenu)
-            }
+            self.dismissRideSession()
         }
     }
     
     // MARK: - Helpers
+    private func shouldPresentRideActionView(_ present:Bool){
+        UIView.animate(withDuration: viewModel.animationDuration) {
+            self.rideActionView.frame.origin.y = self.viewModel.getRideActionViewOriginY(present: present)
+        }
+    }
+    
     private func configure(user:User){
         viewModel.user = user
         locationInputView.user = user
@@ -99,30 +100,20 @@ class HomeController:UIViewController {
         LocationService.shared.enableLocationServices()
     }
     
-    private func removePlacemarkAnnotation(){
-        mapView.annotations.forEach { annotation in
-            if let annotation = annotation as? MKPointAnnotation {
-                mapView.removeAnnotation(annotation)
-            }
+    private func dismissRideSession(){
+        
+        removePlacemarkAnnotationAndOverlays()
+        UIView.animate(withDuration: viewModel.animationDuration) {
+            self.inputActivationView.alpha = 1
+            self.updateActionButtonConfig(.showMenu)
+            self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+            self.shouldPresentRideActionView(false)
         }
     }
-    
+  
     private func updateActionButtonConfig(_ actionConfig: ActionButtonConfiguration){
         viewModel.actionButtonConfig = actionConfig
         actionButton.setImage(actionConfig.buttonImage, for: .normal)
-    }
-    
-    private func setupDriver(user driver: User){
-        guard let coordinate = driver.location?.coordinate else {return}
-        
-        if let existingDriverAnnotation = viewModel.driverIsVisible(mapView: mapView, user: driver) {
-            
-            existingDriverAnnotation.updateAnnotationPosition(withCoordinate: coordinate)
-            
-        }else{
-            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
-            mapView.addAnnotation(annotation)
-        }
     }
     
     private func setupUI(){
@@ -132,6 +123,7 @@ class HomeController:UIViewController {
         setupInputActivationView()
         animateInputActivationView()
         setupTableView()
+        setupRideActionView()
     }
     
     private func setupMapView(){
@@ -154,6 +146,11 @@ class HomeController:UIViewController {
     private func setupActionButton(){
         view.addSubview(actionButton)
         actionButton.anchor(top:view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor,  paddingTop: 16, paddingLeft: 16, width: 40, height: 33)
+    }
+    
+    private func setupRideActionView(){
+        view.addSubview(rideActionView)
+        rideActionView.frame = CGRect(x: 0, y: viewModel.rideActionViewStartingOriginY, width: viewModel.rideActionViewWidth, height: viewModel.rideActionViewHeight)
     }
     
     private func setupTableView(){
@@ -306,6 +303,11 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource{
         
         dismissLocationView { [weak self] _ in
             self?.addAnnotationWithSelectedPlacemark(placemark)
+            
+            let destination = MKMapItem(placemark: placemark)
+            self?.generatePolyline(toDestination: destination)
+            self?.focusToRegionOfAnnotations()
+            self?.shouldPresentRideActionView(true)
         }
     }
 }
@@ -322,10 +324,77 @@ extension HomeController: MKMapViewDelegate{
         return nil
     }
     
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        if let route = self.viewModel.route {
+            let polyline = route.polyline
+            let lineRenderer = MKPolylineRenderer(overlay: polyline)
+            lineRenderer.strokeColor = .black
+            lineRenderer.lineWidth = 3
+            return lineRenderer
+        }
+        return MKOverlayRenderer()
+    }
+    
+    private func generatePolyline(toDestination destination:MKMapItem){
+        let request = MKDirections.Request()
+        request.source = MKMapItem.forCurrentLocation()
+        request.destination = destination
+        request.transportType = .automobile
+        
+        let directionRequest = MKDirections(request: request)
+        directionRequest.calculate { [weak self] response, error in
+            guard let response = response,
+                  error == nil else {
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+                return
+            }
+            
+            self?.viewModel.route = response.routes[0]
+            guard let polyline = self?.viewModel.route?.polyline else {return}
+            self?.mapView.addOverlay(polyline)
+            
+        }
+    }
+    
     private func addAnnotationWithSelectedPlacemark(_ placemark:MKPlacemark){
         let annotation = MKPointAnnotation()
         annotation.coordinate = placemark.coordinate
         mapView.addAnnotation(annotation)
         mapView.selectAnnotation(annotation, animated: true)
     }
+    
+    private func removePlacemarkAnnotationAndOverlays(){
+        mapView.annotations.forEach { annotation in
+            if let annotation = annotation as? MKPointAnnotation {
+                mapView.removeAnnotation(annotation)
+            }
+        }
+        
+        if mapView.overlays.count > 0 {
+            mapView.removeOverlay(mapView.overlays[0])
+        }
+        
+    }
+    
+    private func setupDriver(user driver: User){
+        guard let coordinate = driver.location?.coordinate else {return}
+        
+        if let existingDriverAnnotation = viewModel.driverIsVisible(mapView: mapView, user: driver) {
+            
+            existingDriverAnnotation.updateAnnotationPosition(withCoordinate: coordinate)
+            
+        }else{
+            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
+            mapView.addAnnotation(annotation)
+        }
+    }
+    
+    private func focusToRegionOfAnnotations(){
+        let annotations = mapView.annotations.filter({ !$0.isKind(of: DriverAnnotation.self) })
+        
+        mapView.showAnnotations(annotations, animated: true)
+    }
+    
 }

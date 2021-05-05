@@ -12,6 +12,7 @@ extension UIImage {
     static let password = UIImage(systemName: "lock")
     static let fullname = UIImage(systemName: "person")
     static let userType = UIImage(systemName: "person.circle")
+    static let car = UIImage(systemName: "car")
     
     static let backImage = UIImage(systemName: "arrow.left")?.withRenderingMode(.alwaysOriginal)
     
