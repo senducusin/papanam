@@ -8,6 +8,24 @@
 import UIKit
 import MapKit
 
+enum ActionButtonConfiguration {
+    case showMenu
+    case dismissActionView
+    
+    init(){
+        self = .showMenu
+    }
+    
+    var buttonImage: UIImage? {
+        switch self {
+        case .showMenu:
+            return UIImage.menuImage
+        case .dismissActionView:
+            return UIImage.backImage
+        }
+    }
+}
+
 struct HomeViewModel {
     
     let homeView: UIView
@@ -17,6 +35,7 @@ struct HomeViewModel {
     var user: User? = nil
     var searchResults = [MKPlacemark]()
     var alreadySetupUI = false
+    var actionButtonConfig = ActionButtonConfiguration()
     
     mutating func shouldSetupUI() -> Bool {
         
