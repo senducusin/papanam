@@ -131,14 +131,14 @@ class PickupController: UIViewController {
     
     // MARK: - API
     private func acceptTrip(){
-        
+        let controller = self
         FirebaseService.shared.acceptTrip(viewModel.trip) { [weak self] error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
             
-            self?.delegate?.didAcceptTrip(self ?? <#default value#>)
+            self?.delegate?.didAcceptTrip(controller)
 //            self?.dismiss(animated: true, completion: nil)
         }
     }
