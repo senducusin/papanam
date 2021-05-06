@@ -48,6 +48,8 @@
 		A6C5BB5926437FC300D78520 /* PickupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C5BB5826437FC300D78520 /* PickupViewModel.swift */; };
 		A6C5BB5B26438D9A00D78520 /* CLLocationCoordinate2D+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C5BB5A26438D9A00D78520 /* CLLocationCoordinate2D+Extensions.swift */; };
 		A6C5BB5F26439B4B00D78520 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C5BB5E26439B4B00D78520 /* Place.swift */; };
+		A6C5BB612643BC5200D78520 /* CLPlacemark+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C5BB602643BC5200D78520 /* CLPlacemark+Extensions.swift */; };
+		A6C5BB632643C6B600D78520 /* PickupTextLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C5BB622643C6B600D78520 /* PickupTextLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +98,8 @@
 		A6C5BB5826437FC300D78520 /* PickupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupViewModel.swift; sourceTree = "<group>"; };
 		A6C5BB5A26438D9A00D78520 /* CLLocationCoordinate2D+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extensions.swift"; sourceTree = "<group>"; };
 		A6C5BB5E26439B4B00D78520 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		A6C5BB602643BC5200D78520 /* CLPlacemark+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLPlacemark+Extensions.swift"; sourceTree = "<group>"; };
+		A6C5BB622643C6B600D78520 /* PickupTextLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupTextLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +203,7 @@
 				A68D457F26422E0F000D969C /* MKPlacemark+Extensions.swift */,
 				A68D458326427440000D969C /* MKMapView+Extensions.swift */,
 				A6C5BB5A26438D9A00D78520 /* CLLocationCoordinate2D+Extensions.swift */,
+				A6C5BB602643BC5200D78520 /* CLPlacemark+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -210,6 +215,7 @@
 				A64A7A9C2640DA68009FBF48 /* Form */,
 				A6B62DD2263FE0B2008BB0EB /* LocationInputActivationView.swift */,
 				A68D45812642653E000D969C /* RideActionView.swift */,
+				A6C5BB622643C6B600D78520 /* PickupTextLabel.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -398,6 +404,7 @@
 				A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */,
 				A6B62DBE263F8746008BB0EB /* AuthService.swift in Sources */,
 				A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */,
+				A6C5BB612643BC5200D78520 /* CLPlacemark+Extensions.swift in Sources */,
 				A690FAD5263CEC0C005F1C98 /* FormFieldContainer.swift in Sources */,
 				A6C5BB5B26438D9A00D78520 /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				A6B62DD5263FF33B008BB0EB /* LocationInputView.swift in Sources */,
@@ -412,6 +419,7 @@
 				A6B62DCC263F9D46008BB0EB /* User.swift in Sources */,
 				A64A7AA126411531009FBF48 /* FirebaseService.swift in Sources */,
 				A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */,
+				A6C5BB632643C6B600D78520 /* PickupTextLabel.swift in Sources */,
 				A690FAD7263CED0F005F1C98 /* UIImage+Extensions.swift in Sources */,
 				A6B62DCE263FC779008BB0EB /* HomeController.swift in Sources */,
 				A6B62DD3263FE0B2008BB0EB /* LocationInputActivationView.swift in Sources */,

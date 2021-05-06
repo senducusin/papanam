@@ -46,6 +46,18 @@ extension FirebaseService {
             completion(trip)
         }
     }
+    
+    public func acceptTrip(_ trip:Trip, completion:@escaping(Error?, DatabaseReference)->()){
+        guard let uid = Auth.auth().currentUser?.uid,
+              let tripUid = trip.passengerUid else {return}
+        
+        let values = [
+            "driverUid":uid,
+            "state":TripState.accepted.rawValue
+        ] as [String : Any]
+        
+        Database.refTrips.child(tripUid).updateChildValues(values, withCompletionBlock: completion)
+    }
 }
 
 // MARK: - Passenger API
@@ -53,7 +65,10 @@ extension FirebaseService {
     public func uploadTrip(_ trip: Trip, completion:@escaping(Error?, DatabaseReference)->()){
         
         guard let uid = Auth.auth().currentUser?.uid,
-              let dictionary = trip.toDictionary() else {return}
+              let dictionary = trip.toDictionary() else {
+            print("DEBUG: error encoding")
+            return
+        }
         
         Database.refTrips.child(uid).updateChildValues(dictionary,withCompletionBlock: completion)
     }

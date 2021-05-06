@@ -23,8 +23,6 @@ enum AuthServiceError: Error {
 class AuthService {
     
     static let shared = AuthService()
-    
-    
 }
 
 extension AuthService {

@@ -33,9 +33,9 @@ class HomeController:UIViewController {
     // MARK: - Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        signout()
-
+        
+//                        signout()
+        
         if AuthService.shared.activeUser == nil {
             DispatchQueue.main.async {
                 self.showLoginView()
@@ -50,6 +50,8 @@ class HomeController:UIViewController {
             // == Add a preloader here ==
             fetchCurrentUserData(uid: activeUid)
         }
+        
+        print("DEBUG: \(viewModel.trip?.state)")
         
     }
     
@@ -97,18 +99,30 @@ class HomeController:UIViewController {
         }
     }
     
+    private func uploadTrip(_ trip:Trip){
+        FirebaseService.shared.uploadTrip(trip) { error, ref in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            print("DEBUG did upload trip successfully")
+        }
+    }
+    
     // MARK: - Selectors
     @objc private func actionHandler(){
         switch viewModel.actionButtonConfig {
         case .showMenu :
-//            AuthService.shared.signOut { error in
-//                print(error?.localizedDescription)
-//            }
+            //            AuthService.shared.signOut { error in
+            //                print(error?.localizedDescription)
+            //            }
             break;
         case .dismissActionView:
             self.dismissRideSession()
         }
     }
+    
     
     // MARK: - Helpers
     private func showPickupController(trip:Trip){
@@ -160,7 +174,7 @@ class HomeController:UIViewController {
             self.shouldPresentRideActionView(false)
         }
     }
-  
+    
     private func updateActionButtonConfig(_ actionConfig: ActionButtonConfiguration){
         viewModel.actionButtonConfig = actionConfig
         actionButton.setImage(actionConfig.buttonImage, for: .normal)
@@ -444,20 +458,25 @@ extension HomeController: MKMapViewDelegate{
 // MARK: - RideActionView Delegate
 extension HomeController: RideActionViewDelegate {
     func uploadTrip(_ view: RideActionView) {
-        guard let pickupCoordinates = LocationService.shared.location?.coordinate,
-              let destinationCoordinates = view.placemark?.coordinate,
-              let address = view.placemark?.address,
-              let title = view.placemark?.name,
-              let trip = Trip(title: title, address: address, pickupCoordinates: pickupCoordinates, destinationCoordinates: destinationCoordinates)
-               else {return}
         
-        FirebaseService.shared.uploadTrip(trip) { error, ref in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
+        guard let user = viewModel.user,
+              let destinationCoordinates = view.placemark?.coordinate,
+              let destinationAddress = view.placemark?.address,
+              let destinationName = view.placemark?.name,
+              let pickupCoordinates = LocationService.shared.location?.coordinate
+        else {
+            print("DEBUG: error 0")
+            return}
+        
+        let destination = Place(coordinate: destinationCoordinates, address: destinationAddress, name: destinationName)
+        
+        pickupCoordinates.getAddress { [weak self] pickup in
             
-            print("DEBUG did upload trip successfully")
+            guard let pickup = pickup else {return}
+            
+            let trip = Trip(passengerUid: user.uid, destination: destination, pickup: pickup)
+            
+            self?.uploadTrip(trip)
         }
     }
 }
