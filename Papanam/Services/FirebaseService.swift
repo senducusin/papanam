@@ -13,11 +13,11 @@ import GeoFire
 class FirebaseService {
     static let shared = FirebaseService()
     
-    private func fetchUserDataWith(uid:String, location:CLLocation? = nil, completion:@escaping userOrErrorCompletion){
+    public func fetchUserDataWith(uid:String, location:CLLocation? = nil, completion:@escaping userOrErrorCompletion){
         Database.refUsers.child(uid).observeSingleEvent(of: .value) { snapshot in
             if let userDictionary = snapshot.value as? jsonDictionary {
                 guard var user = User(snapshot.key, withDictionary: userDictionary) else {
-                    completion(.failure(.userNotFound))
+                    completion(.failure(.encodingError))
                     return
                 }
                 
@@ -33,18 +33,31 @@ class FirebaseService {
     }
 }
 
+// MARK: - Driver API
 extension FirebaseService {
-    // MARK: - Fetch User
-    public func fetchCurrentUserData(completion:@escaping userOrErrorCompletion){
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion(.failure(.userNotFound))
-            return
+    public func observeTrips(completion:@escaping(Trip?)->()) {
+        Database.refTrips.observe(.childAdded) { snapshot in
+            guard let dictionary = snapshot.value as? jsonDictionary else {
+                completion(nil)
+                return
+            }
+            
+            let trip = Trip(passengerUid: snapshot.key, dictionary: dictionary)
+            completion(trip)
         }
+    }
+}
+
+// MARK: - Passenger API
+extension FirebaseService {
+    public func uploadTrip(_ trip: Trip, completion:@escaping(Error?, DatabaseReference)->()){
         
-        fetchUserDataWith(uid: uid, completion: completion)
+        guard let uid = Auth.auth().currentUser?.uid,
+              let dictionary = trip.toDictionary() else {return}
+        
+        Database.refTrips.child(uid).updateChildValues(dictionary,withCompletionBlock: completion)
     }
     
-    // MARK: - Fetch Drivers
     public func fetchDrivers(completion:@escaping userOrErrorCompletion){
         guard let location = LocationService.shared.location else {return}
         let geoFire = GeoFire(firebaseRef: Database.refDriverLocations)
@@ -56,21 +69,5 @@ extension FirebaseService {
             })
         }
     }
-    
-    // MARK: - Upload trip
-    public func uploadTrip(_ pickupCoordinates: CLLocationCoordinate2D, _ destinationCoordinates: CLLocationCoordinate2D, completion:@escaping(Error?, DatabaseReference)->()){
-        
-        guard let uid = Auth.auth().currentUser?.uid else {return}
-        
-        let pickupArray = [pickupCoordinates.latitude, pickupCoordinates.longitude]
-        let destinationArray = [destinationCoordinates.latitude, destinationCoordinates.longitude]
-        
-        let values = [
-            "pickupCoordinates": pickupArray,
-            "destinationCoordinates": destinationArray,
-            "state": TripState.requested.rawValue
-        ] as [String : Any]
-        
-        Database.refTrips.child(uid).updateChildValues(values,withCompletionBlock: completion)
-    }
+
 }

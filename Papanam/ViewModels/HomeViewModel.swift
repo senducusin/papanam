@@ -30,18 +30,18 @@ struct HomeViewModel {
     
     let homeView: UIView
     let locationInputViewHeight:CGFloat = 200
-//    let rideActionViewHeight:CGFloat = 300
     let animationDuration:Double = 0.3
     
     var user: User? = nil
     var route: MKRoute? = nil
+    var trip: Trip? = nil
     var searchResults = [MKPlacemark]()
     var alreadySetupUI = false
     var actionButtonConfig = ActionButtonConfiguration()
     
     mutating func shouldSetupUI() -> Bool {
         
-        if !alreadySetupUI && AuthService.shared.isUserLoggedIn() {
+        if !alreadySetupUI{
             self.alreadySetupUI.toggle()
             return true
         }

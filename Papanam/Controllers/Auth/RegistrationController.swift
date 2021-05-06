@@ -37,7 +37,7 @@ class RegistrationController: UIViewController {
     private lazy var passwordContainerView = FormFieldContainer(formTextField: passwordTextField, icon: .password)
     
     private let userTypeSegmentedControl:UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["Rider", "Driver"])
+        let segmentedControl = UISegmentedControl(items: ["Passenger", "Driver"])
         segmentedControl.backgroundColor = .themeBlack
         segmentedControl.tintColor = .themeWhiteText
         segmentedControl.selectedSegmentIndex = 0
@@ -88,7 +88,7 @@ class RegistrationController: UIViewController {
               let fullname = viewModel.fullname,
               let userType = UserType(rawValue: userTypeSegmentedControl.selectedSegmentIndex) else {return}
         
-        let newUser = NewUser(email: email, fullname: fullname, userType: userType, password: password)
+        let newUser = NewUser(email: email, fullname: fullname, type: userType, password: password)
         
         AuthService.shared.signupNewUser(newUser) { [weak self] error in
             if let error = error {

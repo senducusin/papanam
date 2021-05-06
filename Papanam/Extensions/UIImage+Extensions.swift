@@ -19,4 +19,6 @@ extension UIImage {
     static let menuImage = UIImage(systemName: "line.horizontal.3")?.withRenderingMode(.alwaysOriginal)
     
     static let driverAnnotation = UIImage(systemName: "chevron.right.circle.fill")?.withRenderingMode(.alwaysOriginal)
+    
+    static let cancel = UIImage(systemName: "xmark")?.withRenderingMode(.alwaysTemplate)
 }

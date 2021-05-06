@@ -7,14 +7,23 @@
 
 import CoreLocation
 
-struct Trip {
+struct Trip: Codable {
     var pickupCoordinates: CLLocationCoordinate2D
     var destinationCoordinates: CLLocationCoordinate2D
-    let passengerUid: String
+    var passengerUid: String? = nil
     var driverUid:String? = nil
-    var state: TripState
-    
+    var state: TripState = .requested
+    var title: String?
+    var address: String?
+}
 
+extension Trip {
+    init?(title:String, address:String, pickupCoordinates:CLLocationCoordinate2D, destinationCoordinates:CLLocationCoordinate2D){
+        self.address = address
+        self.title = title
+        self.pickupCoordinates = pickupCoordinates
+        self.destinationCoordinates = destinationCoordinates
+    }
 }
 
 extension Trip {
@@ -39,10 +48,13 @@ extension Trip {
               let tripState = TripState(rawValue: state) else {return nil}
         self.state = tripState
         
+        title = dictionary["title"] as? String
+        address = dictionary["address"] as? String
+        
     }
 }
 
 
-enum TripState: Int {
+enum TripState: Int,Codable {
     case requested, accepted, inProgress, completed
 }

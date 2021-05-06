@@ -11,7 +11,7 @@ import Foundation
 struct NewUser:Encodable{
     let email: String
     let fullname: String
-    let userType: UserType
+    let type: UserType
     
     var password: String?
 }
@@ -20,7 +20,7 @@ extension NewUser {
     init(_ newUser: NewUser){
         self.email = newUser.email
         self.fullname = newUser.fullname
-        self.userType = newUser.userType
+        self.type = newUser.type
         self.password = nil
     }
 }

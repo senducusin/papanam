@@ -23,7 +23,7 @@ enum AuthServiceError: Error {
 class AuthService {
     
     static let shared = AuthService()
-
+    
     
 }
 
@@ -64,7 +64,7 @@ extension AuthService {
                 return
             }
             
-            if newUser.userType == .driver {
+            if newUser.type == .driver {
                 let geoFire = GeoFire(firebaseRef: ref)
                 geoFire.setLocation(location, forKey: uid) { error in
                     Database.refUsers.child(uid).updateChildValues(newUserDictionary)
@@ -91,6 +91,7 @@ extension AuthService {
     
     // MARK: - Logout
     public func signOut(completion:@escaping errorCompletion){
+        print("DEBUG: Signing out...")
         do{
             try Auth.auth().signOut()
             completion(nil)
@@ -101,10 +102,10 @@ extension AuthService {
     }
     
     // MARK: - isLoggedIn
-    public func isUserLoggedIn() -> Bool {
+    var activeUser: String? {
         
-        guard Auth.auth().currentUser?.uid != nil else {return false}
+        guard let uid = Auth.auth().currentUser?.uid else {return nil}
         
-        return true
+        return uid
     }
 }

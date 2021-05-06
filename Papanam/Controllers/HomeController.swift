@@ -33,8 +33,10 @@ class HomeController:UIViewController {
     // MARK: - Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if !AuthService.shared.isUserLoggedIn() {
+
+//        signout()
+
+        if AuthService.shared.activeUser == nil {
             DispatchQueue.main.async {
                 self.showLoginView()
             }
@@ -43,15 +45,26 @@ class HomeController:UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if viewModel.shouldSetupUI() {
+        
+        if let activeUid = AuthService.shared.activeUser, viewModel.shouldSetupUI() {
             // == Add a preloader here ==
-            fetchCurrentUserData()
+            fetchCurrentUserData(uid: activeUid)
         }
+        
     }
     
     // MARK: - API
+    private func observeTrips(){
+        FirebaseService.shared.observeTrips { [weak self] trip in
+            guard let trip = trip else {return}
+            
+            self?.viewModel.trip = trip
+            self?.showPickupController(trip: trip)
+        }
+    }
+    
     private func fetchDrivers(){
-        guard viewModel.user?.userType == .passenger else {return}
+        guard viewModel.user?.type == .passenger else {return}
         
         FirebaseService.shared.fetchDrivers { [weak self] result in
             switch result {
@@ -63,18 +76,24 @@ class HomeController:UIViewController {
         }
     }
     
-    private func fetchCurrentUserData(){
-        FirebaseService.shared.fetchCurrentUserData { [weak self] result in
+    private func fetchCurrentUserData(uid:String){
+        FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
             switch result {
             case .success(let user):
                 self?.configure(user: user)
-//                                                    AuthService.shared.signOut { error in
-//                                                        print(error?.localizedDescription)
-//                                                    }
-                self?.fetchDrivers()
             case .failure(let error):
-                print("DEBUG: \(error.localizedDescription)")
+                print("DEBUG: ? \(error.localizedDescription)")
             }
+        }
+    }
+    
+    private func signout(){
+        AuthService.shared.signOut { [weak self] error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            self?.showLoginView()
         }
     }
     
@@ -82,13 +101,22 @@ class HomeController:UIViewController {
     @objc private func actionHandler(){
         switch viewModel.actionButtonConfig {
         case .showMenu :
-            break
+//            AuthService.shared.signOut { error in
+//                print(error?.localizedDescription)
+//            }
+            break;
         case .dismissActionView:
             self.dismissRideSession()
         }
     }
     
     // MARK: - Helpers
+    private func showPickupController(trip:Trip){
+        let controller = PickupController(trip: trip)
+        controller.modalPresentationStyle = .fullScreen
+        present(controller, animated: true, completion: nil)
+    }
+    
     private func shouldPresentRideActionView(_ present:Bool){
         UIView.animate(withDuration: viewModel.animationDuration) {
             self.rideActionView.frame.origin.y = self.viewModel.getRideActionViewOriginY(present: present)
@@ -112,13 +140,18 @@ class HomeController:UIViewController {
     
     private func configure(user:User){
         viewModel.user = user
-        locationInputView.user = user
         setupUI()
         LocationService.shared.enableLocationServices()
+        
+        if user.type == .passenger {
+            locationInputView.user = user
+            fetchDrivers()
+        }else if user.type == .driver{
+            observeTrips()
+        }
     }
     
     private func dismissRideSession(){
-        
         removePlacemarkAnnotationAndOverlays()
         UIView.animate(withDuration: viewModel.animationDuration) {
             self.inputActivationView.alpha = 1
@@ -142,7 +175,7 @@ class HomeController:UIViewController {
     }
     
     private func setupUiForPassenger(){
-        guard viewModel.user?.userType == .passenger else {return}
+        guard viewModel.user?.type == .passenger else {return}
         setupInputActivationView()
         setupTableView()
     }
@@ -206,16 +239,6 @@ extension HomeController {
         let nav = UINavigationController(rootViewController: LoginController())
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true, completion: nil)
-    }
-    
-    private func signoutHandler(){
-        AuthService.shared.signOut { [weak self] error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            self?.showLoginView()
-        }
     }
 }
 
@@ -422,9 +445,13 @@ extension HomeController: MKMapViewDelegate{
 extension HomeController: RideActionViewDelegate {
     func uploadTrip(_ view: RideActionView) {
         guard let pickupCoordinates = LocationService.shared.location?.coordinate,
-              let destinationCoordinates = view.placemark?.coordinate else {return}
+              let destinationCoordinates = view.placemark?.coordinate,
+              let address = view.placemark?.address,
+              let title = view.placemark?.name,
+              let trip = Trip(title: title, address: address, pickupCoordinates: pickupCoordinates, destinationCoordinates: destinationCoordinates)
+               else {return}
         
-        FirebaseService.shared.uploadTrip(pickupCoordinates, destinationCoordinates) { error, ref in
+        FirebaseService.shared.uploadTrip(trip) { error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -433,7 +460,4 @@ extension HomeController: RideActionViewDelegate {
             print("DEBUG did upload trip successfully")
         }
     }
-
-    
-    
 }
