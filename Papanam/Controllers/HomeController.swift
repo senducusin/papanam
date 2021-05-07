@@ -13,7 +13,7 @@ class HomeController:UIViewController {
     private let mapView = MKMapView()
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
-    private let rideActionView = RideActionView()
+    private lazy var rideActionView = RideActionView(user: viewModel.user)
     private let tableView = UITableView()
     
     private lazy var actionButton: UIButton = {
@@ -34,7 +34,7 @@ class HomeController:UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//                        signout()
+        //                        signout()
         
         if AuthService.shared.activeUser == nil {
             DispatchQueue.main.async {
@@ -48,14 +48,54 @@ class HomeController:UIViewController {
         
         if let activeUid = AuthService.shared.activeUser, viewModel.shouldSetupUI() {
             // == Add a preloader here ==
-            fetchCurrentUserData(uid: activeUid)
+            FirebaseService.shared.fetchUserDataWith(uid: activeUid) { [weak self] result in
+                switch result {
+                case .success(let user):
+                    self?.configure(user: user)
+                case .failure(let error):
+                    print("DEBUG: ? \(error.localizedDescription)")
+                }
+            }
         }
     }
     
     // MARK: - API
+    private func fetchAndConfigurePassengerWithUid(_ uid: String, config:RideActionConfiguration){
+       
+        FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
+            switch result {
+            
+            case .success(let user):
+    
+                self?.rideActionView.viewModel.passenger = user
+                self?.rideActionView.viewModel.config = config
+                self?.shouldPresentRideActionView(true)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func fetchAndConfigureDriverWithUid(_ uid: String, config:RideActionConfiguration){
+       
+        FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
+            switch result {
+            
+            case .success(let user):
+    
+                self?.rideActionView.viewModel.driver = user
+                self?.rideActionView.viewModel.config = config
+                self?.shouldPresentRideActionView(true)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     private func observeTrips(){
         FirebaseService.shared.observeTrips { [weak self] trip in
-            guard let trip = trip else {return}
+            guard let trip = trip,
+                  trip.state == .requested else {return}
             
             self?.viewModel.trip = trip
             self?.showPickupController(trip: trip)
@@ -71,17 +111,6 @@ class HomeController:UIViewController {
                 self?.setupDriver(user: user)
             case .failure(let error):
                 print("DEBUG: \(error)")
-            }
-        }
-    }
-    
-    private func fetchCurrentUserData(uid:String){
-        FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
-            switch result {
-            case .success(let user):
-                self?.configure(user: user)
-            case .failure(let error):
-                print("DEBUG: ? \(error.localizedDescription)")
             }
         }
     }
@@ -121,10 +150,12 @@ class HomeController:UIViewController {
             self?.viewModel.trip = trip
             
             if trip.state == .accepted {
+                
+                
                 self?.shouldPresentLoadingView(false)
+                self?.presentRideActionView(withConfig: .tripAccepted)
             }
             
-            // show ride accepted view
         }
     }
     
@@ -167,8 +198,26 @@ class HomeController:UIViewController {
     }
     
     private func presentRideActionView(withPlacemark placemark:MKPlacemark){
-        rideActionView.placemark = placemark
+        rideActionView.viewModel.placemark = placemark
         shouldPresentRideActionView(true)
+    }
+    
+    private func presentRideActionView(withConfig config:RideActionConfiguration){
+        
+        guard let trip = viewModel.trip else {return}
+        
+        if config == .tripAccepted {
+            if  viewModel.user?.type == .driver {
+                guard let uid = trip.passengerUid else {return}
+                self.fetchAndConfigurePassengerWithUid(uid, config: config)
+            } else if viewModel.user?.type == .passenger {
+                guard let uid = trip.driverUid else {return}
+                self.fetchAndConfigureDriverWithUid(uid, config: config)
+            }
+        }else{
+            rideActionView.viewModel.config = config
+            shouldPresentRideActionView(true)
+        }
     }
     
     private func configure(user:User){
@@ -475,17 +524,31 @@ extension HomeController: MKMapViewDelegate{
     
 }
 
-// MARK: - RideActionView Delegate
+// MARK: - RideActionView Delegate & Helpers
 extension HomeController: RideActionViewDelegate {
-    func uploadTrip(_ view: RideActionView) {
+    func buttonTapped(_ view: RideActionView, rideActionConfig: RideActionConfiguration) {
+        switch rideActionConfig {
         
+        case .requestRide:
+            uploadTripHandler(view)
+        case .tripAccepted:
+            print("DEBUG: Get Directions")
+        case .pickupPassenger:
+            break
+        case .tripInProgress:
+            break
+        case .endTrip:
+            break
+        }
+    }
+    
+    private func uploadTripHandler(_ view: RideActionView){
         guard let user = viewModel.user,
-              let destinationCoordinates = view.placemark?.coordinate,
-              let destinationAddress = view.placemark?.address,
-              let destinationName = view.placemark?.name,
+              let destinationCoordinates = view.viewModel.placemark?.coordinate,
+              let destinationAddress = view.viewModel.placemark?.address,
+              let destinationName = view.viewModel.placemark?.name,
               let pickupCoordinates = LocationService.shared.location?.coordinate
         else {
-            print("DEBUG: error 0")
             return}
         
         let destination = Place(coordinate: destinationCoordinates, address: destinationAddress, name: destinationName)
@@ -501,12 +564,26 @@ extension HomeController: RideActionViewDelegate {
             self?.uploadTrip(trip)
         }
     }
+    
 }
 
 // MARK: - PickupControllerDelegate & Helpers
 extension HomeController: PickupControllerDelegate {
     func didAcceptTrip(_ controller: PickupController, trip: Trip) {
-        controller.dismiss(animated: true, completion: nil)
         viewModel.trip?.state = .accepted
+        
+        let passengerAnnotation = MKPointAnnotation()
+        passengerAnnotation.coordinate = trip.pickup.coordinate
+        mapView.addAnnotation(passengerAnnotation)
+        
+        let placemark = MKPlacemark(coordinate: trip.pickup.coordinate)
+        let mapItem = MKMapItem(placemark: placemark)
+        generatePolyline(toDestination: mapItem)
+        
+        mapView.zoomToFit(annotations: mapView.annotations)
+        
+        controller.dismiss(animated: true) {
+            self.presentRideActionView(withConfig: .tripAccepted)
+        }
     }
 }

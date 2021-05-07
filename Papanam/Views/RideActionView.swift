@@ -9,28 +9,27 @@ import UIKit
 import MapKit
 
 protocol RideActionViewDelegate: AnyObject {
-    func uploadTrip(_ view:RideActionView)
+    func buttonTapped(_ view: RideActionView, rideActionConfig: RideActionConfiguration)
 }
 
 class RideActionView: UIView {
     // MARK: - Properties
-    var placemark: MKPlacemark? {
-        didSet {
-            configure()
-        }
-    }
-    
+//    var placemark: MKPlacemark? {
+//        didSet {
+//            configureWithPlacemark()
+//        }
+//    }
+//
     weak var delegate: RideActionViewDelegate?
     
-    private let papanamLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "Avenir-Light", size: 20)
-        label.text = "PAPANAM"
         label.textAlignment = .center
         return label
     }()
     
-    private let titleLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18)
         label.text = "Title"
@@ -48,7 +47,7 @@ class RideActionView: UIView {
     }()
     
     private lazy var stackView: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleLabel, addressLabel])
+        let stack = UIStackView(arrangedSubviews: [nameLabel, addressLabel])
         stack.axis = .vertical
         stack.spacing = 4
         stack.distribution = .fillEqually
@@ -82,17 +81,30 @@ class RideActionView: UIView {
     private lazy var confirmButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .black
-        button.setTitle("CONFIRM DESTINATION", for: .normal)
+//        button.setTitle("CONFIRM DESTINATION", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 18)
         button.addTarget(self, action: #selector(confirmHandler), for: .touchUpInside)
         return button
     }()
     
+    var viewModel = RideActionViewModel(config: .requestRide)
     // MARK: - Lifecycle
-    override init(frame: CGRect){
-        super.init(frame: frame)
+    init(user:User?){
+        super.init(frame: .zero)
+        
+        if user?.type == .driver {
+            viewModel.driver = user
+        }else {
+            viewModel.passenger = user
+        }
+        
+        viewModel.currentUserType = user?.type
+        
         setupUI()
+        viewModel.setConfig = { [weak self] vm in
+            self?.configureWith(vm)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -101,13 +113,16 @@ class RideActionView: UIView {
     
     // MARK: - Selector
     @objc private func confirmHandler(){
-        delegate?.uploadTrip(self)
+        delegate?.buttonTapped(self, rideActionConfig: viewModel.config)
     }
     
     // MARK: - Helpers
-    private func configure(){
-        titleLabel.text = placemark?.name
-        addressLabel.text = placemark?.address
+    private func configureWith(_ vm:RideActionViewModel){
+        nameLabel.text = vm.nameText
+        addressLabel.text = vm.addressText
+        titleLabel.text = vm.titleText
+        
+        confirmButton.setTitle(vm.buttonDescription, for: .normal)
     }
     
     private func setupUI(){
@@ -134,14 +149,14 @@ class RideActionView: UIView {
     }
     
     private func setupPapanamLabel(){
-        addSubview(papanamLabel)
-        papanamLabel.centerX(inView: self)
-        papanamLabel.anchor(top:infoView.bottomAnchor, paddingTop: 3)
+        addSubview(titleLabel)
+        titleLabel.centerX(inView: self)
+        titleLabel.anchor(top:infoView.bottomAnchor, paddingTop: 3)
     }
     
     private func setupSeparatorView(){
         addSubview(separatorView)
-        separatorView.anchor(top:papanamLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 4, height: 0.75)
+        separatorView.anchor(top:titleLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 4, height: 0.75)
     }
     
     private func setupConfirmButton(){

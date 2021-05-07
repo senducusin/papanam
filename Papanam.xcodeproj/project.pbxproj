@@ -32,6 +32,7 @@
 		A690FADD263CF61D005F1C98 /* FormAttributedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */; };
 		A690FADF263CFC86005F1C98 /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FADE263CFC86005F1C98 /* RegistrationController.swift */; };
 		A690FAE1263CFE0D005F1C98 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */; };
+		A69CEE9A2644E09600AF27CF /* RideActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A69CEE992644E09600AF27CF /* RideActionViewModel.swift */; };
 		A6B62DBE263F8746008BB0EB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DBD263F8746008BB0EB /* AuthService.swift */; };
 		A6B62DC1263F8783008BB0EB /* NewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC0263F8783008BB0EB /* NewUser.swift */; };
 		A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */; };
@@ -82,6 +83,7 @@
 		A690FADC263CF61D005F1C98 /* FormAttributedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAttributedButton.swift; sourceTree = "<group>"; };
 		A690FADE263CFC86005F1C98 /* RegistrationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationController.swift; sourceTree = "<group>"; };
 		A690FAE0263CFE0D005F1C98 /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
+		A69CEE992644E09600AF27CF /* RideActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionViewModel.swift; sourceTree = "<group>"; };
 		A6B62DBD263F8746008BB0EB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		A6B62DC0263F8783008BB0EB /* NewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUser.swift; sourceTree = "<group>"; };
 		A6B62DC2263F8E64008BB0EB /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				A6B62DC9263F9AA7008BB0EB /* LoginViewModel.swift */,
 				A6B62DD0263FCE03008BB0EB /* HomeViewModel.swift */,
 				A6C5BB5826437FC300D78520 /* PickupViewModel.swift */,
+				A69CEE992644E09600AF27CF /* RideActionViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 			files = (
 				A68D458826427FBC000D969C /* Trip.swift in Sources */,
 				A690FAE1263CFE0D005F1C98 /* UILabel+Extensions.swift in Sources */,
+				A69CEE9A2644E09600AF27CF /* RideActionViewModel.swift in Sources */,
 				A68D458426427440000D969C /* MKMapView+Extensions.swift in Sources */,
 				A6C5BB5F26439B4B00D78520 /* Place.swift in Sources */,
 				A690FACB263CDD75005F1C98 /* LoginController.swift in Sources */,
