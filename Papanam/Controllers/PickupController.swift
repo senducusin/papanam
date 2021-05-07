@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 
 protocol PickupControllerDelegate: AnyObject {
-    func didAcceptTrip(_ controller: PickupController)
+    func didAcceptTrip(_ controller: PickupController, trip: Trip)
 }
 
 class PickupController: UIViewController {
@@ -75,7 +75,7 @@ class PickupController: UIViewController {
     
     private let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(white: 1, alpha: 0.65)
+        view.backgroundColor = .themeWhiteText
         return view
     }()
     
@@ -132,14 +132,14 @@ class PickupController: UIViewController {
     // MARK: - API
     private func acceptTrip(){
         let controller = self
+        let trip = self.viewModel.trip
         FirebaseService.shared.acceptTrip(viewModel.trip) { [weak self] error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
             
-            self?.delegate?.didAcceptTrip(controller)
-//            self?.dismiss(animated: true, completion: nil)
+            self?.delegate?.didAcceptTrip(controller, trip: trip)
         }
     }
     
@@ -194,8 +194,6 @@ class PickupController: UIViewController {
     private func configure(){
         let region = viewModel.region
         
-        print(viewModel.trip)
-        
         mapView.setRegion(region, animated: false)
         mapView.addAnnotation(viewModel.placeAnnotation)
         mapView.selectAnnotation(mapView.annotations[0], animated: false)
@@ -209,6 +207,5 @@ class PickupController: UIViewController {
             self?.infoLabel.text = "\(minutesEta) • \(distance)"
         }
     }
-    
     
 }

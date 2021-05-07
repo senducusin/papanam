@@ -52,7 +52,7 @@ struct PickupViewModel {
         
         let dropoffLocation = CLLocation(latitude: destinationCoordinates.latitude, longitude: destinationCoordinates.longitude)
         
-        return "\(String(format: "%.1f", pickupLocation.distance(from: dropoffLocation) / 1609.344) ) mi"
+        return getDoubleStrWithOneDecimal(pickupLocation.distance(from: dropoffLocation) / 1609.344, withUnit: "mi")
     }
     
     public func getEta(completion:@escaping(String?)->()){
@@ -71,9 +71,14 @@ struct PickupViewModel {
             
             if response.routes.count > 0 {
                 let route = response.routes[0]
-                completion( "\(String(format: "%.1f", route.expectedTravelTime/60)) min" )
+                completion( getDoubleStrWithOneDecimal(route.expectedTravelTime/60, withUnit: "min") )
             }
         }
     }
 }
 
+extension PickupViewModel {
+    private func getDoubleStrWithOneDecimal(_ value:Double, withUnit unit:String) ->String {
+        return "\(String(format: "%.1f",value)) \(unit)"
+    }
+}

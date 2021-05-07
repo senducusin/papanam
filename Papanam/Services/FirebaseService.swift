@@ -84,5 +84,18 @@ extension FirebaseService {
             })
         }
     }
+    
+    public func observeCurrentTrip(completion:@escaping(Trip?)->()){
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        Database.refTrips.child(uid).observe(.value) { snapshot in
+            guard let dictionary = snapshot.value as? jsonDictionary else {
+                completion(nil)
+                return
+            }
+            let trip = Trip(passengerUid: snapshot.key, dictionary: dictionary)
+            completion(trip)
+        }
+    }
 
 }

@@ -50,9 +50,6 @@ class HomeController:UIViewController {
             // == Add a preloader here ==
             fetchCurrentUserData(uid: activeUid)
         }
-        
-        print("DEBUG: \(viewModel.trip?.state)")
-        
     }
     
     // MARK: - API
@@ -100,13 +97,34 @@ class HomeController:UIViewController {
     }
     
     private func uploadTrip(_ trip:Trip){
-        FirebaseService.shared.uploadTrip(trip) { error, ref in
+        let animationDuration = viewModel.animationDuration
+        let frameHeight = self.view.frame.height
+        
+        FirebaseService.shared.uploadTrip(trip) { [weak self] error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
             
-            print("DEBUG did upload trip successfully")
+            UIView.animate(withDuration: animationDuration) {
+                self?.rideActionView.frame.origin.y = frameHeight
+            }
+        }
+    }
+    
+    private func observeCurrentTrip(){
+        FirebaseService.shared.observeCurrentTrip { [weak self] trip in
+            guard let trip = trip else {
+                return
+            }
+            
+            self?.viewModel.trip = trip
+            
+            if trip.state == .accepted {
+                self?.shouldPresentLoadingView(false)
+            }
+            
+            // show ride accepted view
         }
     }
     
@@ -128,6 +146,7 @@ class HomeController:UIViewController {
     private func showPickupController(trip:Trip){
         let controller = PickupController(trip: trip)
         controller.modalPresentationStyle = .fullScreen
+        controller.delegate = self
         present(controller, animated: true, completion: nil)
     }
     
@@ -160,6 +179,7 @@ class HomeController:UIViewController {
         if user.type == .passenger {
             locationInputView.user = user
             fetchDrivers()
+            observeCurrentTrip()
         }else if user.type == .driver{
             observeTrips()
         }
@@ -474,9 +494,19 @@ extension HomeController: RideActionViewDelegate {
             
             guard let pickup = pickup else {return}
             
+            self?.shouldPresentLoadingView(true, message: "Finding you a ride...")
+            
             let trip = Trip(passengerUid: user.uid, destination: destination, pickup: pickup)
             
             self?.uploadTrip(trip)
         }
+    }
+}
+
+// MARK: - PickupControllerDelegate & Helpers
+extension HomeController: PickupControllerDelegate {
+    func didAcceptTrip(_ controller: PickupController, trip: Trip) {
+        controller.dismiss(animated: true, completion: nil)
+        viewModel.trip?.state = .accepted
     }
 }
