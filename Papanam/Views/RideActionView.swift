@@ -72,6 +72,27 @@ class RideActionView: UIView {
         return view
     }()
     
+    private lazy var infoViewWithLabel: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.layer.cornerRadius = 30
+        
+        view.addSubview(infoViewLabel)
+        infoViewLabel.centerX(inView: view)
+        infoViewLabel.centerY(inView: view)
+        
+        view.isHidden = true
+        
+        return view
+    }()
+    
+    private let infoViewLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 30)
+        label.textColor = .white
+        return label
+    }()
+    
     private let separatorView: UIView = {
         let view = UIView()
         view.backgroundColor = .lightGray
@@ -121,8 +142,20 @@ class RideActionView: UIView {
         nameLabel.text = vm.nameText
         addressLabel.text = vm.addressText
         titleLabel.text = vm.titleText
+        infoViewLabel.text = vm.infoLabelCharacter
         
         confirmButton.setTitle(vm.buttonDescription, for: .normal)
+        confirmButton.isEnabled = vm.buttonShouldEnable
+        
+        if vm.config == .requestRide {
+            infoView.isHidden = false
+            infoViewWithLabel.isHidden = true
+            
+        }else{
+            infoViewWithLabel.isHidden = false
+            infoView.isHidden = true
+            
+        }
     }
     
     private func setupUI(){
@@ -131,6 +164,7 @@ class RideActionView: UIView {
         
         setupStack()
         setupInfoView()
+        setupInfoViewWithLabel()
         setupPapanamLabel()
         setupSeparatorView()
         setupConfirmButton()
@@ -146,6 +180,12 @@ class RideActionView: UIView {
         addSubview(infoView)
         infoView.centerX(inView: self)
         infoView.anchor(top:stackView.bottomAnchor,paddingTop: 8, width: 60, height: 60)
+    }
+    
+    private func setupInfoViewWithLabel(){
+        addSubview(infoViewWithLabel)
+        infoViewWithLabel.centerX(inView: self)
+        infoViewWithLabel.anchor(top:stackView.bottomAnchor,paddingTop: 8, width: 60, height: 60)
     }
     
     private func setupPapanamLabel(){

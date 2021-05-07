@@ -44,17 +44,17 @@ struct RideActionViewModel{
         case .pickupPassenger:
             return "GET DIRECTIONS"
         case .tripInProgress:
-            return "PICKUP PASSENGER"
+            return currentUserType == .passenger ? "TRIP IN PROGRESS" : "GET DIRECTIONS"
         case .endTrip:
-            return "DROP OFF PASSENGER"
+            return currentUserType == .driver ? "DROP OFF PASSENGER" : "ARRIVED AT DESTINATION"
         }
     }
     
     var nameText: String? {
-       
+        
         
         switch config {
-
+        
         case .requestRide:
             return placemark?.name
         case .tripAccepted:
@@ -99,12 +99,36 @@ struct RideActionViewModel{
                 return driver.fullname
             }
         case .pickupPassenger:
-            return ""
+            if currentUserType == .driver {
+                return "Arrived at passenger location"
+            }
+                return ""
         case .tripInProgress:
-            return ""
+           return "En Route to Destination"
         case .endTrip:
             return ""
         }
+    }
+    
+    var infoLabelCharacter: String? {
+        if currentUserType == .driver {
+            guard let passenger = passenger,
+                  let first = passenger.fullname.first else {return "P"}
+            return String(first)
+        }else if currentUserType == .passenger {
+            guard let driver = driver,
+                  let first = driver.fullname.first else {return "D"}
+            return String(first)
+        }
+        return nil
+    }
+    
+    var buttonShouldEnable:Bool {
+        if config == .tripInProgress && currentUserType == .passenger ||
+            config == .endTrip && currentUserType == .passenger {
+            return false
+        }
+        return true
     }
     
 }

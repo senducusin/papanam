@@ -61,12 +61,12 @@ class HomeController:UIViewController {
     
     // MARK: - API
     private func fetchAndConfigurePassengerWithUid(_ uid: String, config:RideActionConfiguration){
-       
+        
         FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
             switch result {
             
             case .success(let user):
-    
+                
                 self?.rideActionView.viewModel.passenger = user
                 self?.rideActionView.viewModel.config = config
                 self?.shouldPresentRideActionView(true)
@@ -77,12 +77,12 @@ class HomeController:UIViewController {
     }
     
     private func fetchAndConfigureDriverWithUid(_ uid: String, config:RideActionConfiguration){
-       
+        
         FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
             switch result {
             
             case .success(let user):
-    
+                
                 self?.rideActionView.viewModel.driver = user
                 self?.rideActionView.viewModel.config = config
                 self?.shouldPresentRideActionView(true)
@@ -532,7 +532,12 @@ extension HomeController: RideActionViewDelegate {
         case .requestRide:
             uploadTripHandler(view)
         case .tripAccepted:
-            print("DEBUG: Get Directions")
+            if viewModel.user?.type == .driver {
+                print("DEBUG: Get Directions")
+            }else if viewModel.user?.type == .passenger {
+                print("DEBUG: Cancel Trip")
+            }
+            
         case .pickupPassenger:
             break
         case .tripInProgress:
