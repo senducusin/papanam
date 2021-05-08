@@ -35,7 +35,7 @@ class FirebaseService {
 
 // MARK: - Driver API
 extension FirebaseService {
-    public func observeTrips(completion:@escaping(Trip?)->()) {
+    public func observeAddedTrips(completion:@escaping(Trip?)->()) {
         Database.refTrips.observe(.childAdded) { snapshot in
             guard let dictionary = snapshot.value as? jsonDictionary else {
                 completion(nil)
@@ -45,6 +45,15 @@ extension FirebaseService {
             let trip = Trip(passengerUid: snapshot.key, dictionary: dictionary)
             completion(trip)
         }
+    }
+    
+    public func observeCancelledTrip(_ trip: Trip, completion:@escaping()->()){
+        guard let passengerUid = trip.passengerUid else {return}
+        
+        Database.refTrips.child(passengerUid).observeSingleEvent(of: .childRemoved) { snapshot in
+            completion()
+        }
+       
     }
     
     public func acceptTrip(_ trip:Trip, completion:@escaping(Error?, DatabaseReference)->()){
@@ -96,6 +105,11 @@ extension FirebaseService {
             let trip = Trip(passengerUid: snapshot.key, dictionary: dictionary)
             completion(trip)
         }
+    }
+    
+    public func cancelTrip(completion:@escaping(Error?,DatabaseReference) -> ()){
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        Database.refTrips.child(uid).removeValue(completionBlock: completion)
     }
 
 }

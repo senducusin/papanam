@@ -9,17 +9,13 @@ import UIKit
 import MapKit
 
 protocol RideActionViewDelegate: AnyObject {
-    func buttonTapped(_ view: RideActionView, rideActionConfig: RideActionConfiguration)
+    func uploadTrip(_ view: RideActionView)
+    func cancelTrip()
+    func getDirections()
 }
 
 class RideActionView: UIView {
     // MARK: - Properties
-//    var placemark: MKPlacemark? {
-//        didSet {
-//            configureWithPlacemark()
-//        }
-//    }
-//
     weak var delegate: RideActionViewDelegate?
     
     private let titleLabel: UILabel = {
@@ -105,7 +101,7 @@ class RideActionView: UIView {
 //        button.setTitle("CONFIRM DESTINATION", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .boldSystemFont(ofSize: 18)
-        button.addTarget(self, action: #selector(confirmHandler), for: .touchUpInside)
+        button.addTarget(self, action: #selector(buttonActionHandler), for: .touchUpInside)
         return button
     }()
     
@@ -133,8 +129,23 @@ class RideActionView: UIView {
     }
     
     // MARK: - Selector
-    @objc private func confirmHandler(){
-        delegate?.buttonTapped(self, rideActionConfig: viewModel.config)
+    @objc private func buttonActionHandler(){
+        switch viewModel.config {
+        case .requestRide:
+            delegate?.uploadTrip(self)
+        case .tripAccepted:
+            if viewModel.currentUserType == .driver {
+                delegate?.getDirections()
+            }else {
+                delegate?.cancelTrip()
+            }
+        case .pickupPassenger:
+            break
+        case .tripInProgress:
+            break
+        case .endTrip:
+            break
+        }
     }
     
     // MARK: - Helpers

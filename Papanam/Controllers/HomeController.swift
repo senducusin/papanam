@@ -92,8 +92,16 @@ class HomeController:UIViewController {
         }
     }
     
-    private func observeTrips(){
-        FirebaseService.shared.observeTrips { [weak self] trip in
+    private func observeCancelledTrip(_ trip:Trip){
+        FirebaseService.shared.observeCancelledTrip(trip) {
+            self.viewModel.trip = nil
+            self.dismissRideSessionUI()
+            self.presentAlertController(withTitle: "Oops!", withMessage: "The passenger has cancelled this trip. Press OK to continue")
+        }
+    }
+    
+    private func observeAddedTrips(){
+        FirebaseService.shared.observeAddedTrips { [weak self] trip in
             guard let trip = trip,
                   trip.state == .requested else {return}
             
@@ -141,6 +149,23 @@ class HomeController:UIViewController {
         }
     }
     
+    private func cancelTripHandler(usingActionButton:Bool){
+        FirebaseService.shared.cancelTrip { [weak self] error, ref in
+            if let error = error {
+                print(error.localizedDescription)
+                
+                if usingActionButton {
+                    self?.viewModel.trip = nil
+                    self?.dismissRideSessionUI()
+                }
+                
+                return
+            }
+            self?.viewModel.trip = nil
+            self?.dismissRideSessionUI()
+        }
+    }
+    
     private func observeCurrentTrip(){
         FirebaseService.shared.observeCurrentTrip { [weak self] trip in
             guard let trip = trip else {
@@ -150,8 +175,6 @@ class HomeController:UIViewController {
             self?.viewModel.trip = trip
             
             if trip.state == .accepted {
-                
-                
                 self?.shouldPresentLoadingView(false)
                 self?.presentRideActionView(withConfig: .tripAccepted)
             }
@@ -168,12 +191,14 @@ class HomeController:UIViewController {
             //            }
             break;
         case .dismissActionView:
-            self.dismissRideSession()
+            
+            cancelTripHandler(usingActionButton: true)
         }
     }
     
     
     // MARK: - Helpers
+    
     private func showPickupController(trip:Trip){
         let controller = PickupController(trip: trip)
         controller.modalPresentationStyle = .fullScreen
@@ -199,6 +224,7 @@ class HomeController:UIViewController {
     
     private func presentRideActionView(withPlacemark placemark:MKPlacemark){
         rideActionView.viewModel.placemark = placemark
+        rideActionView.viewModel.config = .requestRide
         shouldPresentRideActionView(true)
     }
     
@@ -230,20 +256,34 @@ class HomeController:UIViewController {
             fetchDrivers()
             observeCurrentTrip()
         }else if user.type == .driver{
-            observeTrips()
+            observeAddedTrips()
         }
     }
     
-    private func dismissRideSession(){
+    private func clearTrip(){
+        if viewModel.trip != nil {
+            rideActionView.viewModel.config = .requestRide
+            viewModel.trip = nil
+        }
+    }
+    
+    private func dismissRideSessionUI(){
+
         removePlacemarkAnnotationAndOverlays()
         UIView.animate(withDuration: viewModel.animationDuration) {
-            self.inputActivationView.alpha = 1
-            self.updateActionButtonConfig(.showMenu)
-            self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+            
+            if self.viewModel.user?.type == .passenger {
+                self.inputActivationView.alpha = 1
+                self.updateActionButtonConfig(.showMenu)
+            }
+            
+            // With all annotations included
+//            self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+            
+            self.centerMapOnUserLocation()
             self.shouldPresentRideActionView(false)
         }
     }
-    
     private func updateActionButtonConfig(_ actionConfig: ActionButtonConfiguration){
         viewModel.actionButtonConfig = actionConfig
         actionButton.setImage(actionConfig.buttonImage, for: .normal)
@@ -516,6 +556,12 @@ extension HomeController: MKMapViewDelegate{
         }
     }
     
+    private func centerMapOnUserLocation(){
+        guard let coordinate = LocationService.shared.location?.coordinate else {return}
+        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 2000, longitudinalMeters: 2000)
+        mapView.setRegion(region, animated: true)
+    }
+    
     private func focusToRegionOfAnnotations(){
         let annotations = mapView.annotations.filter({ !$0.isKind(of: DriverAnnotation.self) })
         
@@ -526,25 +572,16 @@ extension HomeController: MKMapViewDelegate{
 
 // MARK: - RideActionView Delegate & Helpers
 extension HomeController: RideActionViewDelegate {
-    func buttonTapped(_ view: RideActionView, rideActionConfig: RideActionConfiguration) {
-        switch rideActionConfig {
+    func cancelTrip() {
+        cancelTripHandler(usingActionButton: false)
+    }
+    
+    func getDirections() {
         
-        case .requestRide:
-            uploadTripHandler(view)
-        case .tripAccepted:
-            if viewModel.user?.type == .driver {
-                print("DEBUG: Get Directions")
-            }else if viewModel.user?.type == .passenger {
-                print("DEBUG: Cancel Trip")
-            }
-            
-        case .pickupPassenger:
-            break
-        case .tripInProgress:
-            break
-        case .endTrip:
-            break
-        }
+    }
+    
+    func uploadTrip(_ view: RideActionView) {
+        uploadTripHandler(view)
     }
     
     private func uploadTripHandler(_ view: RideActionView){
@@ -589,6 +626,7 @@ extension HomeController: PickupControllerDelegate {
         
         controller.dismiss(animated: true) {
             self.presentRideActionView(withConfig: .tripAccepted)
+            self.observeCancelledTrip(trip)
         }
     }
 }
