@@ -41,6 +41,14 @@ class HomeController:UIViewController {
                 self.showLoginView()
             }
         }
+        
+//        LocationService.shared.didStartMonitor = { manager, region in
+//            print("DEBUG: Did start monitoring")
+//        }
+        
+        LocationService.shared.didEnterRegion = {
+            print("DEBUG: did Enter region")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -577,6 +585,12 @@ extension HomeController: MKMapViewDelegate{
         mapView.showAnnotations(annotations, animated: true)
     }
     
+    private func setCustomRegion(withCoordinates coordinates: CLLocationCoordinate2D){
+        let region = CLCircularRegion(center: coordinates, radius: 25, identifier: "pickup-region")
+        
+        LocationService.shared.locationManager.startMonitoring(for: region)
+    }
+    
 }
 
 // MARK: - RideActionView Delegate & Helpers
@@ -630,6 +644,8 @@ extension HomeController: PickupControllerDelegate {
         let placemark = MKPlacemark(coordinate: trip.pickup.coordinate)
         let mapItem = MKMapItem(placemark: placemark)
         generatePolyline(toDestination: mapItem)
+        
+        setCustomRegion(withCoordinates: trip.pickup.coordinate)
         
         mapView.zoomToFit(annotations: mapView.annotations)
         

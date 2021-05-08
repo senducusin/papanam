@@ -11,6 +11,8 @@ class LocationService: NSObject {
     static let shared = LocationService()
     
     var locationManager: CLLocationManager!
+    var didStartMonitor:((_ manager: CLLocationManager, _ region:CLRegion)->())? = nil
+    var didEnterRegion:(()->())? = nil
     
     override init(){
         super.init()
@@ -31,6 +33,14 @@ extension LocationService: CLLocationManagerDelegate {
         if status == .authorizedWhenInUse {
             setupLocationManager()
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        didStartMonitor?(manager, region)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        didEnterRegion?()
     }
 }
 
