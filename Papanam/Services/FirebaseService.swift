@@ -67,6 +67,13 @@ extension FirebaseService {
         
         Database.refTrips.child(tripUid).updateChildValues(values, withCompletionBlock: completion)
     }
+    
+    public func updateDriverLocation(location:CLLocation){
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let geofire = GeoFire(firebaseRef: Database.refDriverLocations)
+        geofire.setLocation(location, forKey: uid)
+    }
 }
 
 // MARK: - Passenger API

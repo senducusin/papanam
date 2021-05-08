@@ -479,6 +479,15 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource{
 
 // MARK: - MKMapViewDelegate Delegate & Helpers
 extension HomeController: MKMapViewDelegate{
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        guard let userType = viewModel.user?.type,
+              userType == .driver,
+              let location = userLocation.location else {return}
+        
+        FirebaseService.shared.updateDriverLocation(location: location)
+    }
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? DriverAnnotation {
             let view = MKAnnotationView(annotation: annotation, reuseIdentifier: MKAnnotationView.driverAnnotationIdentifier)
