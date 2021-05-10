@@ -8,8 +8,14 @@
 import UIKit
 import MapKit
 
+protocol HomeControllerDelegate:AnyObject {
+    func handleMenuToggle()
+}
+
 class HomeController:UIViewController {
     // MARK: - Properties
+    weak var delegate: HomeControllerDelegate?
+    
     private let mapView = MKMapView()
     private let inputActivationView = LocationInputActivationView()
     private let locationInputView = LocationInputView()
@@ -33,8 +39,6 @@ class HomeController:UIViewController {
     // MARK: - Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //                        signout()
         
         if AuthService.shared.activeUser == nil {
             DispatchQueue.main.async {
@@ -255,10 +259,7 @@ class HomeController:UIViewController {
     @objc private func actionHandler(){
         switch viewModel.actionButtonConfig {
         case .showMenu :
-            //            AuthService.shared.signOut { error in
-            //                print(error?.localizedDescription)
-            //            }
-            break;
+            delegate?.handleMenuToggle()
         case .dismissActionView:
             cancelTripHandler(usingActionButton: true)
         }

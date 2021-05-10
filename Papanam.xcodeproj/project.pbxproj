@@ -15,6 +15,11 @@
 		A64A7AA72641231A009FBF48 /* MKAnnotationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA62641231A009FBF48 /* MKAnnotationView+Extensions.swift */; };
 		A6651DD7264901DB004064A2 /* DriverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DD6264901DB004064A2 /* DriverService.swift */; };
 		A6651DD9264903DB004064A2 /* PassengerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DD8264903DB004064A2 /* PassengerService.swift */; };
+		A6651DDC264909DE004064A2 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DDB264909DE004064A2 /* MenuController.swift */; };
+		A6651DDE264909F2004064A2 /* ContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DDD264909F2004064A2 /* ContainerController.swift */; };
+		A6651DE12649140F004064A2 /* ContainerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DE02649140F004064A2 /* ContainerViewModel.swift */; };
+		A6651DE326491D42004064A2 /* MenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DE226491D42004064A2 /* MenuHeader.swift */; };
+		A6651DE526491E28004064A2 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DE426491E28004064A2 /* MenuViewModel.swift */; };
 		A68D458026422E0F000D969C /* MKPlacemark+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68D457F26422E0F000D969C /* MKPlacemark+Extensions.swift */; };
 		A68D45822642653E000D969C /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68D45812642653E000D969C /* RideActionView.swift */; };
 		A68D458426427440000D969C /* MKMapView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68D458326427440000D969C /* MKMapView+Extensions.swift */; };
@@ -65,6 +70,11 @@
 		A64A7AA62641231A009FBF48 /* MKAnnotationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKAnnotationView+Extensions.swift"; sourceTree = "<group>"; };
 		A6651DD6264901DB004064A2 /* DriverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverService.swift; sourceTree = "<group>"; };
 		A6651DD8264903DB004064A2 /* PassengerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassengerService.swift; sourceTree = "<group>"; };
+		A6651DDB264909DE004064A2 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		A6651DDD264909F2004064A2 /* ContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerController.swift; sourceTree = "<group>"; };
+		A6651DE02649140F004064A2 /* ContainerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewModel.swift; sourceTree = "<group>"; };
+		A6651DE226491D42004064A2 /* MenuHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuHeader.swift; sourceTree = "<group>"; };
+		A6651DE426491E28004064A2 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
 		A68D457F26422E0F000D969C /* MKPlacemark+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPlacemark+Extensions.swift"; sourceTree = "<group>"; };
 		A68D45812642653E000D969C /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		A68D458326427440000D969C /* MKMapView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Extensions.swift"; sourceTree = "<group>"; };
@@ -147,6 +157,24 @@
 			path = LocationInput;
 			sourceTree = "<group>";
 		};
+		A6651DDA264909BE004064A2 /* SideMenu */ = {
+			isa = PBXGroup;
+			children = (
+				A6651DDB264909DE004064A2 /* MenuController.swift */,
+				A6651DDD264909F2004064A2 /* ContainerController.swift */,
+			);
+			path = SideMenu;
+			sourceTree = "<group>";
+		};
+		A6651DDF264913B1004064A2 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */,
+				A6B62DC9263F9AA7008BB0EB /* LoginViewModel.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		A690FAA9263CDBAD005F1C98 = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +215,7 @@
 		A690FAC9263CDCD4005F1C98 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A6651DDA264909BE004064A2 /* SideMenu */,
 				A6B62DCF263FCB27008BB0EB /* Auth */,
 				A6B62DCD263FC779008BB0EB /* HomeController.swift */,
 				A6C5BB5626437F3100D78520 /* PickupController.swift */,
@@ -220,6 +249,7 @@
 				A6B62DD2263FE0B2008BB0EB /* LocationInputActivationView.swift */,
 				A68D45812642653E000D969C /* RideActionView.swift */,
 				A6C5BB622643C6B600D78520 /* PickupTextLabel.swift */,
+				A6651DE226491D42004064A2 /* MenuHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -250,11 +280,12 @@
 		A6B62DC6263F9565008BB0EB /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				A6B62DC7263F9572008BB0EB /* RegistrationViewModel.swift */,
-				A6B62DC9263F9AA7008BB0EB /* LoginViewModel.swift */,
+				A6651DDF264913B1004064A2 /* Auth */,
 				A6B62DD0263FCE03008BB0EB /* HomeViewModel.swift */,
 				A6C5BB5826437FC300D78520 /* PickupViewModel.swift */,
 				A69CEE992644E09600AF27CF /* RideActionViewModel.swift */,
+				A6651DE02649140F004064A2 /* ContainerViewModel.swift */,
+				A6651DE426491E28004064A2 /* MenuViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -397,10 +428,12 @@
 				A68D458426427440000D969C /* MKMapView+Extensions.swift in Sources */,
 				A6C5BB5F26439B4B00D78520 /* Place.swift in Sources */,
 				A690FACB263CDD75005F1C98 /* LoginController.swift in Sources */,
+				A6651DE12649140F004064A2 /* ContainerViewModel.swift in Sources */,
 				A6C5BB5926437FC300D78520 /* PickupViewModel.swift in Sources */,
 				A690FADD263CF61D005F1C98 /* FormAttributedButton.swift in Sources */,
 				A6C5BB5726437F3100D78520 /* PickupController.swift in Sources */,
 				A64A7A9B2640D1BF009FBF48 /* LocationInputCell.swift in Sources */,
+				A6651DE526491E28004064A2 /* MenuViewModel.swift in Sources */,
 				A64A7AA526411E99009FBF48 /* DriverAnnotation.swift in Sources */,
 				A6B62DD1263FCE03008BB0EB /* HomeViewModel.swift in Sources */,
 				A64A7AA72641231A009FBF48 /* MKAnnotationView+Extensions.swift in Sources */,
@@ -408,11 +441,13 @@
 				A68D458026422E0F000D969C /* MKPlacemark+Extensions.swift in Sources */,
 				A690FAD0263CDFD0005F1C98 /* UIColor+Extensions.swift in Sources */,
 				A6651DD9264903DB004064A2 /* PassengerService.swift in Sources */,
+				A6651DE326491D42004064A2 /* MenuHeader.swift in Sources */,
 				A6B62DD7263FFE31008BB0EB /* LocationInputTextField.swift in Sources */,
 				A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */,
 				A6B62DBE263F8746008BB0EB /* AuthService.swift in Sources */,
 				A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */,
 				A6C5BB612643BC5200D78520 /* CLPlacemark+Extensions.swift in Sources */,
+				A6651DDC264909DE004064A2 /* MenuController.swift in Sources */,
 				A690FAD5263CEC0C005F1C98 /* FormFieldContainer.swift in Sources */,
 				A6C5BB5B26438D9A00D78520 /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				A6B62DD5263FF33B008BB0EB /* LocationInputView.swift in Sources */,
@@ -425,6 +460,7 @@
 				A690FAB8263CDBAD005F1C98 /* SceneDelegate.swift in Sources */,
 				A64A7AA3264115A7009FBF48 /* Database+Extensions.swift in Sources */,
 				A68D45822642653E000D969C /* RideActionView.swift in Sources */,
+				A6651DDE264909F2004064A2 /* ContainerController.swift in Sources */,
 				A6B62DCC263F9D46008BB0EB /* User.swift in Sources */,
 				A6B62DC8263F9572008BB0EB /* RegistrationViewModel.swift in Sources */,
 				A6C5BB632643C6B600D78520 /* PickupTextLabel.swift in Sources */,
