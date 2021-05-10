@@ -133,7 +133,7 @@ class PickupController: UIViewController {
     private func acceptTrip(){
         let controller = self
         let trip = self.viewModel.trip
-        FirebaseService.shared.acceptTrip(viewModel.trip) { [weak self] error, ref in
+        DriverService.shared.acceptTrip(viewModel.trip) { [weak self] error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 return

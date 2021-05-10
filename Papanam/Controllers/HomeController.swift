@@ -55,11 +55,11 @@ class HomeController:UIViewController {
             guard let trip = self.viewModel.trip else {return}
             
             if region.identifier == AnnotationType.pickup.rawValue {
-                FirebaseService.shared.updateTripState(trip: trip, state: .driverArrived) { [weak self] error, ref in
+                DriverService.shared.updateTripState(trip: trip, state: .driverArrived) { [weak self] error, ref in
                     self?.rideActionView.viewModel.config = .pickupPassenger
                 }
             }else if region.identifier == AnnotationType.destination.rawValue {
-                FirebaseService.shared.updateTripState(trip: trip, state: .arrivedAtDestination) { [weak self] error, ref in
+                DriverService.shared.updateTripState(trip: trip, state: .arrivedAtDestination) { [weak self] error, ref in
                     self?.rideActionView.viewModel.config = .endTrip
                 }
             }
@@ -71,7 +71,7 @@ class HomeController:UIViewController {
         
         if let activeUid = AuthService.shared.activeUser, viewModel.shouldSetupUI() {
             // == Add a preloader here ==
-            FirebaseService.shared.fetchUserDataWith(uid: activeUid) { [weak self] result in
+            PassengerService.shared.fetchUserDataWith(uid: activeUid) { [weak self] result in
                 switch result {
                 case .success(let user):
                     self?.configure(user: user)
@@ -86,7 +86,7 @@ class HomeController:UIViewController {
     
     private func startTrip(){
         guard let trip = viewModel.trip else {return}
-        FirebaseService.shared.updateTripState(trip: trip, state: .inProgress) { [weak self] error, ref in
+        DriverService.shared.updateTripState(trip: trip, state: .inProgress) { [weak self] error, ref in
             self?.rideActionView.viewModel.config = .tripInProgress
             self?.removePlacemarkAnnotationAndOverlays()
             self?.mapView.addAnnotationAndSelect(forCoordinate: trip.destination.coordinate)
@@ -104,7 +104,7 @@ class HomeController:UIViewController {
     
     private func fetchAndConfigurePassengerWithUid(_ uid: String, config:RideActionConfiguration){
         
-        FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
+        PassengerService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
             switch result {
             
             case .success(let user):
@@ -120,7 +120,7 @@ class HomeController:UIViewController {
     
     private func fetchAndConfigureDriverWithUid(_ uid: String, config:RideActionConfiguration){
         
-        FirebaseService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
+        PassengerService.shared.fetchUserDataWith(uid: uid) { [weak self] result in
             switch result {
             
             case .success(let user):
@@ -135,7 +135,7 @@ class HomeController:UIViewController {
     }
     
     private func observeCancelledTrip(_ trip:Trip){
-        FirebaseService.shared.observeCancelledTrip(trip) {
+        DriverService.shared.observeCancelledTrip(trip) {
             self.viewModel.trip = nil
             self.dismissRideSessionUI()
             self.presentAlertController(withTitle: "Oops!", withMessage: "The passenger has cancelled this trip. Press OK to continue")
@@ -143,7 +143,7 @@ class HomeController:UIViewController {
     }
     
     private func observeAddedTrips(){
-        FirebaseService.shared.observeAddedTrips { [weak self] trip in
+        DriverService.shared.observeAddedTrips { [weak self] trip in
             guard let trip = trip,
                   trip.state == .requested else {return}
             
@@ -155,7 +155,7 @@ class HomeController:UIViewController {
     private func fetchDrivers(){
         guard viewModel.user?.type == .passenger else {return}
         
-        FirebaseService.shared.fetchDrivers { [weak self] result in
+        PassengerService.shared.fetchDrivers { [weak self] result in
             switch result {
             case .success(let user):
                 self?.setupDriver(user: user)
@@ -180,7 +180,7 @@ class HomeController:UIViewController {
         let animationDuration = viewModel.animationDuration
         let frameHeight = self.view.frame.height
         
-        FirebaseService.shared.uploadTrip(trip) { [weak self] error, ref in
+        PassengerService.shared.uploadTrip(trip) { [weak self] error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -193,7 +193,7 @@ class HomeController:UIViewController {
     }
     
     private func cancelTripHandler(usingActionButton:Bool){
-        FirebaseService.shared.deleteTrip { [weak self] error, ref in
+        PassengerService.shared.deleteTrip { [weak self] error, ref in
             if let error = error {
                 print(error.localizedDescription)
                 
@@ -210,7 +210,7 @@ class HomeController:UIViewController {
     }
     
     private func observeCurrentTrip(){
-        FirebaseService.shared.observeCurrentTrip { [weak self] trip in
+        PassengerService.shared.observeCurrentTrip { [weak self] trip in
             guard let trip = trip else {
                 return
             }
@@ -234,7 +234,7 @@ class HomeController:UIViewController {
             }else if trip.state == .completed {
 
                 
-                FirebaseService.shared.deleteTrip { [weak self] error, ref in
+                PassengerService.shared.deleteTrip { [weak self] error, ref in
                     if let error = error {
                         print(error.localizedDescription)
                         return
@@ -244,7 +244,7 @@ class HomeController:UIViewController {
                     self?.centerMapOnUserLocation()
                     self?.inputActivationView.alpha = 1
                     self?.updateActionButtonConfig(.showMenu)
-                    self?.presentAlertController(withTitle: "Trip Completed", withMessage: "PAPANAM Hope you enjoyed your trip!")
+                    self?.presentAlertController(withTitle: "Trip Completed", withMessage: "PAPANAM hope you enjoyed your trip!")
                 }
             }
             
@@ -577,7 +577,7 @@ extension HomeController: MKMapViewDelegate{
               userType == .driver,
               let location = userLocation.location else {return}
         
-        FirebaseService.shared.updateDriverLocation(location: location)
+        DriverService.shared.updateDriverLocation(location: location)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -684,7 +684,7 @@ extension HomeController: RideActionViewDelegate {
     func dropOffPassenger() {
         guard let trip = viewModel.trip else {return}
         
-        FirebaseService.shared.updateTripState(trip: trip, state: .completed) { [weak self] error, ref in
+        DriverService.shared.updateTripState(trip: trip, state: .completed) { [weak self] error, ref in
             self?.removePlacemarkAnnotationAndOverlays()
             self?.centerMapOnUserLocation()
             self?.shouldPresentRideActionView(false)
