@@ -26,6 +26,11 @@ enum ActionButtonConfiguration {
     }
 }
 
+enum AnnotationType: String {
+    case pickup = "pickup"
+    case destination = "destination"
+}
+
 struct HomeViewModel {
     
     let homeView: UIView

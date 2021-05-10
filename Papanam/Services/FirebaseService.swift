@@ -74,6 +74,17 @@ extension FirebaseService {
         let geofire = GeoFire(firebaseRef: Database.refDriverLocations)
         geofire.setLocation(location, forKey: uid)
     }
+    
+    public func updateTripState(trip: Trip, state: TripState, completion:@escaping(Error?, DatabaseReference)->()){
+        guard let passengerUid = trip.passengerUid else { return }
+        
+        Database.refTrips.child(passengerUid).child("state").setValue(state.rawValue, withCompletionBlock: completion)
+        
+        if state == .completed {
+            guard let passengerUid = trip.passengerUid else {return}
+            Database.refTrips.child(passengerUid).removeAllObservers()
+        }
+    }
 }
 
 // MARK: - Passenger API
@@ -114,7 +125,7 @@ extension FirebaseService {
         }
     }
     
-    public func cancelTrip(completion:@escaping(Error?,DatabaseReference) -> ()){
+    public func deleteTrip(completion:@escaping(Error?,DatabaseReference) -> ()){
         guard let uid = Auth.auth().currentUser?.uid else {return}
         Database.refTrips.child(uid).removeValue(completionBlock: completion)
     }

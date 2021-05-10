@@ -37,7 +37,6 @@ extension DriverAnnotation {
         }
         
         UIView.animate(withDuration: 0.2) {
-            print("DEBUG: current coordinate: \(self.coordinate) | new coordinate: \(coordinate)")
             self.coordinate = coordinate
         }
     }

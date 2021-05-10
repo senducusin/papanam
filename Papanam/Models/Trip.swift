@@ -41,5 +41,5 @@ extension Trip {
 
 
 enum TripState: Int,Codable {
-    case requested, accepted, inProgress, completed
+    case requested, accepted, driverArrived, inProgress, arrivedAtDestination, completed
 }

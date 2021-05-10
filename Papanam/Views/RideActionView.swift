@@ -12,6 +12,8 @@ protocol RideActionViewDelegate: AnyObject {
     func uploadTrip(_ view: RideActionView)
     func cancelTrip()
     func getDirections()
+    func pickupPassenger()
+    func dropOffPassenger()
 }
 
 class RideActionView: UIView {
@@ -100,6 +102,7 @@ class RideActionView: UIView {
         button.backgroundColor = .black
 //        button.setTitle("CONFIRM DESTINATION", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.darkGray, for: .disabled)
         button.titleLabel?.font = .boldSystemFont(ofSize: 18)
         button.addTarget(self, action: #selector(buttonActionHandler), for: .touchUpInside)
         return button
@@ -133,17 +136,23 @@ class RideActionView: UIView {
         switch viewModel.config {
         case .requestRide:
             delegate?.uploadTrip(self)
-        case .tripAccepted:
+        case .tripAccepted, .driverArrived:
             if viewModel.currentUserType == .driver {
                 delegate?.getDirections()
             }else {
                 delegate?.cancelTrip()
             }
         case .pickupPassenger:
+            if viewModel.currentUserType == .driver {
+                delegate?.pickupPassenger()
+            }
             break
         case .tripInProgress:
             break
         case .endTrip:
+            if viewModel.currentUserType == .driver {
+                delegate?.dropOffPassenger()
+            }
             break
         }
     }

@@ -12,7 +12,7 @@ class LocationService: NSObject {
     
     var locationManager: CLLocationManager!
     var didStartMonitor:((_ manager: CLLocationManager, _ region:CLRegion)->())? = nil
-    var didEnterRegion:(()->())? = nil
+    var didEnterRegion:((_ manager: CLLocationManager, _ region:CLRegion)->())? = nil
     
     override init(){
         super.init()
@@ -40,7 +40,7 @@ extension LocationService: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        didEnterRegion?()
+        didEnterRegion?(manager, region)
     }
 }
 

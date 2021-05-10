@@ -9,7 +9,7 @@ import Foundation
 import MapKit
 
 enum RideActionConfiguration: Int{
-    case requestRide, tripAccepted, pickupPassenger, tripInProgress, endTrip
+    case requestRide, tripAccepted, pickupPassenger, tripInProgress, endTrip, driverArrived
 }
 
 struct RideActionViewModel{
@@ -39,10 +39,10 @@ struct RideActionViewModel{
         
         case .requestRide:
             return "CONFIRM DESTINATION"
-        case .tripAccepted:
-            return currentUserType == .driver ? "GET DIRECTIONS" : "CANCEL TRIP"
+        case .tripAccepted, .driverArrived:
+            return currentUserType == .driver ? "GET DIRECTIONS" : "CANCEL RIDE"
         case .pickupPassenger:
-            return "GET DIRECTIONS"
+            return "PICKUP PASSENGER"
         case .tripInProgress:
             return currentUserType == .passenger ? "TRIP IN PROGRESS" : "GET DIRECTIONS"
         case .endTrip:
@@ -60,10 +60,20 @@ struct RideActionViewModel{
         case .tripAccepted:
             return currentUserType == .driver ? "En Route To Passenger" : "Driver En Route"
         case .pickupPassenger:
+            return "Arrived at passenger's location"
+        case .driverArrived:
+            if currentUserType == .passenger {
+                return "Driver has Arrived"
+            }
             return ""
+            
         case .tripInProgress:
-            return ""
+            return "En Route to Destination"
+            
         case .endTrip:
+            return "Arrived at Destination"
+            
+        default:
             return ""
         }
     }
@@ -73,13 +83,10 @@ struct RideActionViewModel{
         
         case .requestRide:
             return placemark?.address
-        case .tripAccepted:
-            return ""
-        case .pickupPassenger:
-            return ""
-        case .tripInProgress:
-            return ""
-        case .endTrip:
+        case .driverArrived:
+            return "Please meet driver at pickup point"
+            
+        default:
             return ""
         }
     }
@@ -90,7 +97,10 @@ struct RideActionViewModel{
         
         case .requestRide:
             return "PAPANAM"
-        case .tripAccepted:
+            
+   
+            
+        default:
             if currentUserType == .driver {
                 guard let passenger = passenger else {return "Passenger"}
                 return passenger.fullname
@@ -98,15 +108,6 @@ struct RideActionViewModel{
                 guard let driver = driver else {return "Driver"}
                 return driver.fullname
             }
-        case .pickupPassenger:
-            if currentUserType == .driver {
-                return "Arrived at passenger location"
-            }
-                return ""
-        case .tripInProgress:
-           return "En Route to Destination"
-        case .endTrip:
-            return ""
         }
     }
     
