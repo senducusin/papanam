@@ -23,7 +23,7 @@ class PickupController: UIViewController {
     
     private let dismissButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage.cancel, for: .normal)
+        button.setImage(UIImage.cancelWithTint, for: .normal)
         button.tintColor = .white
         button.addTarget(self, action: #selector(dismissHandler), for:.touchUpInside )
         return button

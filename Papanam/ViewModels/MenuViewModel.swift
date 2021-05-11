@@ -15,10 +15,10 @@ struct MenuViewModel{
     }
     
     var frameWidth: CGFloat {
-        return view.frame.width - 80
+        return view.frame.width - 60
     }
     
     var headerFrameHeight: CGFloat {
-        return 180
+        return 160
     }
 }

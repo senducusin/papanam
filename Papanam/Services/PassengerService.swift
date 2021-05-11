@@ -75,5 +75,9 @@ extension PassengerService {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         Database.refTrips.child(uid).removeValue(completionBlock: completion)
     }
+    
+    public func removeAllObservers(uid:String){
+        Database.refTrips.child(uid).removeAllObservers()
+    }
 
 }

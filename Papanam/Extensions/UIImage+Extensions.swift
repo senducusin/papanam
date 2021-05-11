@@ -20,5 +20,6 @@ extension UIImage {
     
     static let driverAnnotation = UIImage(systemName: "chevron.right.circle.fill")?.withRenderingMode(.alwaysOriginal)
     
-    static let cancel = UIImage(systemName: "xmark")?.withRenderingMode(.alwaysTemplate)
+    static let cancelWithTint = UIImage(systemName: "xmark")?.withRenderingMode(.alwaysTemplate)
+    static let cancel = UIImage(systemName: "xmark")?.withRenderingMode(.alwaysOriginal)
 }

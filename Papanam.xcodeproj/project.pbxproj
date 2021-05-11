@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4B90C82332896B992C13F081 /* Pods_Papanam.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7504795B2F93CBD9C554EC90 /* Pods_Papanam.framework */; };
+		A614F093264A1E0A007610C6 /* MenuOptionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A614F092264A1E0A007610C6 /* MenuOptionsViewModel.swift */; };
+		A614F095264A6D6F007610C6 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A614F094264A6D6F007610C6 /* SettingsController.swift */; };
+		A614F097264A7615007610C6 /* UserInfoHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A614F096264A7615007610C6 /* UserInfoHeader.swift */; };
 		A64A7A9B2640D1BF009FBF48 /* LocationInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7A9A2640D1BF009FBF48 /* LocationInputCell.swift */; };
 		A64A7A9F2640EF9D009FBF48 /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7A9E2640EF9D009FBF48 /* LocationService.swift */; };
 		A64A7AA3264115A7009FBF48 /* Database+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA2264115A7009FBF48 /* Database+Extensions.swift */; };
@@ -63,6 +66,9 @@
 		2605A12B7A5AC82D956F0CDD /* Pods-Papanam.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Papanam.debug.xcconfig"; path = "Target Support Files/Pods-Papanam/Pods-Papanam.debug.xcconfig"; sourceTree = "<group>"; };
 		43AB806A337280800B293647 /* Pods-Papanam.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Papanam.release.xcconfig"; path = "Target Support Files/Pods-Papanam/Pods-Papanam.release.xcconfig"; sourceTree = "<group>"; };
 		7504795B2F93CBD9C554EC90 /* Pods_Papanam.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Papanam.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A614F092264A1E0A007610C6 /* MenuOptionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuOptionsViewModel.swift; sourceTree = "<group>"; };
+		A614F094264A6D6F007610C6 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		A614F096264A7615007610C6 /* UserInfoHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoHeader.swift; sourceTree = "<group>"; };
 		A64A7A9A2640D1BF009FBF48 /* LocationInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputCell.swift; sourceTree = "<group>"; };
 		A64A7A9E2640EF9D009FBF48 /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		A64A7AA2264115A7009FBF48 /* Database+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Extensions.swift"; sourceTree = "<group>"; };
@@ -219,6 +225,7 @@
 				A6B62DCF263FCB27008BB0EB /* Auth */,
 				A6B62DCD263FC779008BB0EB /* HomeController.swift */,
 				A6C5BB5626437F3100D78520 /* PickupController.swift */,
+				A614F094264A6D6F007610C6 /* SettingsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -250,6 +257,7 @@
 				A68D45812642653E000D969C /* RideActionView.swift */,
 				A6C5BB622643C6B600D78520 /* PickupTextLabel.swift */,
 				A6651DE226491D42004064A2 /* MenuHeader.swift */,
+				A614F096264A7615007610C6 /* UserInfoHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -286,6 +294,7 @@
 				A69CEE992644E09600AF27CF /* RideActionViewModel.swift */,
 				A6651DE02649140F004064A2 /* ContainerViewModel.swift */,
 				A6651DE426491E28004064A2 /* MenuViewModel.swift */,
+				A614F092264A1E0A007610C6 /* MenuOptionsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -446,10 +455,13 @@
 				A690FAB6263CDBAD005F1C98 /* AppDelegate.swift in Sources */,
 				A6B62DBE263F8746008BB0EB /* AuthService.swift in Sources */,
 				A6B62DC3263F8E64008BB0EB /* Encodable+Extensions.swift in Sources */,
+				A614F095264A6D6F007610C6 /* SettingsController.swift in Sources */,
 				A6C5BB612643BC5200D78520 /* CLPlacemark+Extensions.swift in Sources */,
 				A6651DDC264909DE004064A2 /* MenuController.swift in Sources */,
 				A690FAD5263CEC0C005F1C98 /* FormFieldContainer.swift in Sources */,
 				A6C5BB5B26438D9A00D78520 /* CLLocationCoordinate2D+Extensions.swift in Sources */,
+				A614F097264A7615007610C6 /* UserInfoHeader.swift in Sources */,
+				A614F093264A1E0A007610C6 /* MenuOptionsViewModel.swift in Sources */,
 				A6B62DD5263FF33B008BB0EB /* LocationInputView.swift in Sources */,
 				A690FADF263CFC86005F1C98 /* RegistrationController.swift in Sources */,
 				A6B62DCA263F9AA7008BB0EB /* LoginViewModel.swift in Sources */,

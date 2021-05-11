@@ -1,13 +1,13 @@
 //
-//  MenuHeader.swift
+//  UserInfoHeader.swift
 //  Papanam
 //
-//  Created by Jansen Ducusin on 5/10/21.
+//  Created by Jansen Ducusin on 5/11/21.
 //
 
 import UIKit
 
-class MenuHeader: UIView {
+class UserInfoHeader: UIView {
     // MARK: - Properties
     private let profileImageView:UIImageView = {
         let imageView = UIImageView()
@@ -19,7 +19,7 @@ class MenuHeader: UIView {
         let label = UILabel()
         label.text = "Fullname"
         label.font = .systemFont(ofSize: 16)
-        label.textColor = .white
+        label.textColor = .black
         return label
     }()
     
@@ -38,6 +38,7 @@ class MenuHeader: UIView {
     }
     
     // MARK: - Lifecycle
+    
     override init(frame: CGRect){
         super.init(frame: frame)
         setupUI()
@@ -47,8 +48,6 @@ class MenuHeader: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Selectors
-    
     // MARK: - Helpers
     private func configure(){
         guard let user = user else {return}
@@ -57,7 +56,7 @@ class MenuHeader: UIView {
     }
     
     private func setupUI(){
-        backgroundColor = .themeBlack
+        backgroundColor = .white
         
         setupProfileImageView()
         setupStack()
@@ -67,7 +66,9 @@ class MenuHeader: UIView {
         addSubview(profileImageView)
         
         let dimension:CGFloat = 64
-        profileImageView.anchor(top:safeAreaLayoutGuide.topAnchor, left:leftAnchor, paddingTop: 4, paddingLeft: 12, width: dimension, height: dimension)
+        
+        profileImageView.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 12)
+        profileImageView.setDimensions(height: dimension, width: dimension)
         profileImageView.layer.cornerRadius = dimension/2
     }
     

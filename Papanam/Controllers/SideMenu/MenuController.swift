@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol MenuControllerDelegate: AnyObject {
+    func didSelect(option: MenuOptionsViewModel)
+    
+}
+
 class MenuController: UIViewController {
     // MARK: - Properties
     private lazy var tableView: UITableView = {
@@ -31,7 +36,16 @@ class MenuController: UIViewController {
         return view
     }()
     
+    weak var delegate: MenuControllerDelegate?
+    
+    var user: User? {
+        didSet{
+            configure()
+        }
+    }
+    
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -50,16 +64,33 @@ class MenuController: UIViewController {
         view.addSubview(tableView)
         tableView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor)
     }
+    
+    private func configure(){
+        menuHeader.user = user
+    }
 }
+
+// MARK: - UITableView Delegate & Datasource
 
 extension MenuController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return MenuOptionsViewModel.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Test"
+        
+        let menuOption = MenuOptionsViewModel(rawValue: indexPath.row)
+        
+        
+        cell.textLabel?.text = menuOption?.description
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let option = MenuOptionsViewModel(rawValue: indexPath.row) else {return}
+        delegate?.didSelect(option: option)
     }
 }

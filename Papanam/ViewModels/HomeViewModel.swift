@@ -31,20 +31,34 @@ enum AnnotationType: String {
     case destination = "destination"
 }
 
-struct HomeViewModel {
+class HomeViewModel {
     
     let homeView: UIView
     let locationInputViewHeight:CGFloat = 200
     let animationDuration:Double = 0.3
     
-    var user: User? = nil
+    var user: User? = nil {
+        didSet {
+            guard let user = user else {return}
+            userDidSet?(user)
+        }
+    }
+    
+    var oldUser: User? = nil
+    
+    var userDidSet: ((_ user:User)->())?
     var route: MKRoute? = nil
     var trip: Trip? = nil
     var searchResults = [MKPlacemark]()
     var alreadySetupUI = false
     var actionButtonConfig = ActionButtonConfiguration()
+    var appStarted = false
     
-    mutating func shouldSetupUI() -> Bool {
+    init(homeView:UIView){
+        self.homeView = homeView
+    }
+    
+    func shouldSetupUI() -> Bool {
         
         if !alreadySetupUI{
             self.alreadySetupUI.toggle()

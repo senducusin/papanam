@@ -113,13 +113,7 @@ class RideActionView: UIView {
     init(user:User?){
         super.init(frame: .zero)
         
-        if user?.type == .driver {
-            viewModel.driver = user
-        }else {
-            viewModel.passenger = user
-        }
-        
-        viewModel.currentUserType = user?.type
+        setUser(user)
         
         setupUI()
         viewModel.setConfig = { [weak self] vm in
@@ -158,6 +152,16 @@ class RideActionView: UIView {
     }
     
     // MARK: - Helpers
+    public func setUser(_ user:User?){
+        if user?.type == .driver {
+            viewModel.driver = user
+        }else {
+            viewModel.passenger = user
+        }
+        
+        viewModel.currentUserType = user?.type
+    }
+    
     private func configureWith(_ vm:RideActionViewModel){
         nameLabel.text = vm.nameText
         addressLabel.text = vm.addressText

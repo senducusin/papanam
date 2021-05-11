@@ -34,17 +34,11 @@ class HomeController:UIViewController {
         return button
     }()
     
-    private lazy var viewModel = HomeViewModel(homeView: view)
+    lazy var viewModel = HomeViewModel(homeView: view)
     
     // MARK: - Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if AuthService.shared.activeUser == nil {
-            DispatchQueue.main.async {
-                self.showLoginView()
-            }
-        }
         
         LocationService.shared.didStartMonitor = { manager, region in
             print("DEBUG: region identifier \(region.identifier)")
@@ -73,16 +67,18 @@ class HomeController:UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let activeUid = AuthService.shared.activeUser, viewModel.shouldSetupUI() {
-            // == Add a preloader here ==
-            PassengerService.shared.fetchUserDataWith(uid: activeUid) { [weak self] result in
-                switch result {
-                case .success(let user):
-                    self?.configure(user: user)
-                case .failure(let error):
-                    print("DEBUG: ? \(error.localizedDescription)")
-                }
+        if viewModel.shouldSetupUI() {
+            self.configure()
+        }
+        
+        if !viewModel.appStarted {
+            
+            viewModel.userDidSet = { [weak self] user in
+                guard let userOld = self?.viewModel.oldUser else {return}
+                self?.reconfigure(userOld: userOld, user: user)
             }
+            
+            viewModel.appStarted.toggle()
         }
     }
     
@@ -157,8 +153,6 @@ class HomeController:UIViewController {
     }
     
     private func fetchDrivers(){
-        guard viewModel.user?.type == .passenger else {return}
-        
         PassengerService.shared.fetchDrivers { [weak self] result in
             switch result {
             case .success(let user):
@@ -167,16 +161,6 @@ class HomeController:UIViewController {
             case .failure(let error):
                 print("DEBUG: \(error)")
             }
-        }
-    }
-    
-    private func signout(){
-        AuthService.shared.signOut { [weak self] error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            self?.showLoginView()
         }
     }
     
@@ -236,7 +220,6 @@ class HomeController:UIViewController {
                 self?.rideActionView.viewModel.config = .endTrip
                 
             }else if trip.state == .completed {
-
                 
                 PassengerService.shared.deleteTrip { [weak self] error, ref in
                     if let error = error {
@@ -251,7 +234,6 @@ class HomeController:UIViewController {
                     self?.presentAlertController(withTitle: "Trip Completed", withMessage: "PAPANAM hope you enjoyed your trip!")
                 }
             }
-            
         }
     }
     
@@ -265,8 +247,32 @@ class HomeController:UIViewController {
         }
     }
     
-    
     // MARK: - Helpers
+    private func reconfigure(userOld:User, user:User){
+        mapView.removeAnnotations(mapView.annotations)
+        if mapView.overlays.count > 0 {
+            mapView.removeOverlay(mapView.overlays[0])
+        }
+        
+        DriverService.shared.removeAllObservers(uid: userOld.uid)
+        PassengerService.shared.removeAllObservers(uid: userOld.uid)
+        
+        rideActionView.setUser(user)
+        
+        if user.type == .passenger {
+            animateInputActivationView()
+            locationInputView.user = user
+            fetchDrivers()
+            observeCurrentTrip()
+            
+        }else{
+            UIView.animate(withDuration: 0.5) {
+                self.inputActivationView.alpha = 0
+            }
+            
+            observeAddedTrips()
+        }
+    }
     
     private func showAnnotationsInCurrentTrip(withDriverUid uid:String?) {
         
@@ -335,8 +341,9 @@ class HomeController:UIViewController {
         }
     }
     
-    private func configure(user:User){
-        viewModel.user = user
+    private func configure(){
+        guard let user = viewModel.user else {return}
+        
         setupUI()
         LocationService.shared.enableLocationServices()
         
@@ -389,7 +396,7 @@ class HomeController:UIViewController {
     }
     
     private func setupUiForPassenger(){
-        guard viewModel.user?.type == .passenger else {return}
+        //        guard viewModel.user?.type == .passenger else {return}
         setupInputActivationView()
         setupTableView()
     }
@@ -410,7 +417,9 @@ class HomeController:UIViewController {
         inputActivationView.alpha = 0
         inputActivationView.delegate = self
         
-        animateInputActivationView()
+        if viewModel.user?.type == .passenger {
+            animateInputActivationView()
+        }
     }
     
     private func setupActionButton(){
@@ -444,15 +453,6 @@ class HomeController:UIViewController {
         UIView.animate(withDuration: 1.5) {
             self.inputActivationView.alpha = 1
         }
-    }
-}
-
-// MARK: - Auth Service Helper
-extension HomeController {
-    private func showLoginView(){
-        let nav = UINavigationController(rootViewController: LoginController())
-        nav.modalPresentationStyle = .fullScreen
-        present(nav, animated: true, completion: nil)
     }
 }
 
@@ -626,6 +626,7 @@ extension HomeController: MKMapViewDelegate{
     }
     
     private func removePlacemarkAnnotationAndOverlays(){
+        
         mapView.annotations.forEach { annotation in
             if let annotation = annotation as? MKPointAnnotation {
                 mapView.removeAnnotation(annotation)
@@ -672,11 +673,6 @@ extension HomeController: MKMapViewDelegate{
         let region = CLCircularRegion(center: coordinates, radius: 25, identifier: type.rawValue)
         LocationService.shared.locationManager.startMonitoring(for: region)
     }
-    
-    //    private func setCustomRegion(withCoordinates coordinates: CLLocationCoordinate2D){
-    //        let region = CLCircularRegion(center: coordinates, radius: 25, identifier: "pickup-region")
-    //        LocationService.shared.locationManager.startMonitoring(for: region)
-    //    }
     
 }
 
@@ -752,5 +748,14 @@ extension HomeController: PickupControllerDelegate {
             self.presentRideActionView(withConfig: .tripAccepted)
             self.observeCancelledTrip(trip)
         }
+    }
+}
+
+
+// MARK: - Public Methods
+extension HomeController {
+    public func setNewUser(_ user: User){
+        viewModel.oldUser = viewModel.user
+        viewModel.user = user
     }
 }
