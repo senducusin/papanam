@@ -214,7 +214,7 @@ class HomeController:UIViewController {
             self?.viewModel.trip = trip
             if trip.state == .accepted {
                 self?.shouldPresentLoadingView(false)
-                self?.removePlacemarkAnnotationAndOverlays()
+//                self?.removePlacemarkAnnotationAndOverlays()
                 self?.showAnnotationsInCurrentTrip(withDriverUid: trip.driverUid)
                 self?.presentRideActionView(withConfig: .tripAccepted)
                 
@@ -283,13 +283,15 @@ class HomeController:UIViewController {
     }
     
     private func showAnnotationsInCurrentTrip(withDriverUid uid:String?) {
-        
+        print("DEBUG: Will Accept trip")
         guard let uid = uid else {return}
         
         var annotations = [MKAnnotation]()
         self.mapView.annotations.forEach({ annotation in
             if let driverAnno = annotation as? DriverAnnotation {
+                print("DEBUG: annotations: \(driverAnno.uid)")
                 if driverAnno.uid == uid {
+                    print("DEBUG: Anno UID: \(uid)")
                     annotations.append(driverAnno)
                 }
             }
@@ -298,7 +300,7 @@ class HomeController:UIViewController {
                 annotations.append(userAnno)
             }
         })
-        
+        print("DEBUG: Did Accept trip")
         self.mapView.showAnnotations(annotations, animated: true)
     }
     
