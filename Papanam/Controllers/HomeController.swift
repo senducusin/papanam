@@ -67,6 +67,8 @@ class HomeController:UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+//        guard viewModel.needsToReconfigure else {return}
+        
         if viewModel.shouldSetupUI() {
             self.configure()
         }
@@ -74,7 +76,13 @@ class HomeController:UIViewController {
         if !viewModel.appStarted {
             
             viewModel.userDidSet = { [weak self] user in
-                guard let userOld = self?.viewModel.oldUser else {return}
+                
+                self?.tableView.reloadData()
+                
+                guard let vm = self?.viewModel.needsToReconfigure,
+                      vm,
+                      let userOld = self?.viewModel.oldUser else {return}
+                
                 self?.reconfigure(userOld: userOld, user: user)
             }
             
@@ -351,6 +359,7 @@ class HomeController:UIViewController {
             locationInputView.user = user
             fetchDrivers()
             observeCurrentTrip()
+            setupSavedUserLocations()
         }else if user.type == .driver{
             observeAddedTrips()
         }
@@ -454,6 +463,37 @@ class HomeController:UIViewController {
             self.inputActivationView.alpha = 1
         }
     }
+    
+    private func setupSavedUserLocations(){
+        
+        viewModel.savedLocations.removeAll()
+        
+        if let homeLocation = viewModel.user?.homeLocation {
+            geocodeAddressString(address: homeLocation)
+        }
+        
+        if let workLocation = viewModel.user?.workLocation {
+            geocodeAddressString(address: workLocation)
+        }
+    }
+    
+    private func geocodeAddressString(address: String){
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { [weak self] placemarks, error in
+            
+            print("DEBUG: will convert placemark \(placemarks) : \(address)")
+            
+            guard let clPlacemark = placemarks?.first else {return}
+            
+            let placemark = MKPlacemark(placemark: clPlacemark)
+            
+            print("DEBUG: \(address) - \(placemark)")
+            
+            self?.viewModel.savedLocations.append(placemark)
+            self?.tableView.reloadData()
+        }
+    }
+    
 }
 
 // MARK: - LocationInputActivationView Delegate & Helpers
@@ -538,29 +578,31 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : viewModel.numberOfRowsForSearchResult
+//        return section == 0 ?
+//            viewModel.numberOfRowsForSavedLocations :
+//            viewModel.numberOfRowsForSearchResult
+        
+        return viewModel.numberOfRowsForSearchResult
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: LocationInputCell.cellIdentifier, for: indexPath) as! LocationInputCell
         
-        if indexPath.section == 1 {
-            cell.placemark = viewModel.placemarkAt(index: indexPath.row)
-        }else{
-            cell.placemark = nil
-        }
+//        if indexPath.section == 1 {
+            cell.placemark = viewModel.searchResultPlacemarkAt(index: indexPath.row)
+//        }else{
+//            cell.placemark = viewModel.savedLocationPlacemarkAt(index: indexPath.row)
+//        }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let destination = viewModel.placemarkAt(index: indexPath.row)
-        
-        print("DEBUG did select destination \(destination.name)")
+        let destination = viewModel.searchResultPlacemarkAt(index: indexPath.row)
         
         updateActionButtonConfig(.dismissActionView)
         

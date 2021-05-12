@@ -53,6 +53,7 @@ class HomeViewModel {
     var alreadySetupUI = false
     var actionButtonConfig = ActionButtonConfiguration()
     var appStarted = false
+    var savedLocations = [MKPlacemark]()
     
     init(homeView:UIView){
         self.homeView = homeView
@@ -94,6 +95,16 @@ extension HomeViewModel {
         let height = present ? rideActionViewHeight : 0
         return homeView.frame.height - height
     }
+    
+    var needsToReconfigure:Bool {
+        let value = oldUser?.uid != user?.uid
+        
+        if value {
+            oldUser = user
+        }
+        
+        return value
+    }
 }
 
 // MARK: - TableView
@@ -114,8 +125,17 @@ extension HomeViewModel {
         return searchResults.count
     }
     
-    public func placemarkAt(index:Int) -> MKPlacemark {
+    public func searchResultPlacemarkAt(index:Int) -> MKPlacemark {
         return searchResults[index]
+    }
+    
+    var numberOfRowsForSavedLocations:Int{
+        print("DEBUG: savedLocations \(savedLocations)")
+        return savedLocations.count
+    }
+    
+    public func savedLocationPlacemarkAt(index:Int) -> MKPlacemark {
+        return savedLocations[index]
     }
 }
 
@@ -142,5 +162,6 @@ extension HomeViewModel {
         
         return driverAnnotation
     }
+    
 }
 

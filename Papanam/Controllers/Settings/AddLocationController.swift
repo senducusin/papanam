@@ -18,7 +18,6 @@ class AddLocationController: UITableViewController {
     private let searchCompleter = MKLocalSearchCompleter()
     private var searchResults = [MKLocalSearchCompletion](){
         didSet{
-            print("DEBUG: reloaded?")
             tableView.reloadData()
         }
     }

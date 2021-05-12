@@ -36,7 +36,7 @@ class SettingsController: UITableViewController {
     
     // MARK: - Selectors
     @objc func handleDismiss(){
-        
+        self.dismiss(animated: true, completion: nil)
     }
     
     // MARK: - Helpers
