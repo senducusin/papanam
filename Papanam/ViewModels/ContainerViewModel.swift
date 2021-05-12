@@ -10,6 +10,7 @@ import UIKit
 struct ContainerViewModel {
     private var _showMenu = false
     private(set) var toggled = false
+    private let viewWidth:CGFloat = 80
     var appStarted = false
     
     var user: User?
@@ -28,7 +29,7 @@ struct ContainerViewModel {
         
         _showMenu.toggle()
         
-        return _showMenu ? view.frame.width - 60 : 0
+        return _showMenu ? view.frame.width - viewWidth : 0
     }
     
     var showMenu:Bool {
@@ -40,11 +41,11 @@ struct ContainerViewModel {
     }
     
     var blackViewFrame: CGRect {
-        return _showMenu ? CGRect(x: view.frame.width - 60, y: 0, width: 60, height: view.frame.height) : .zero
+        return _showMenu ? CGRect(x: view.frame.width - viewWidth, y: 0, width: viewWidth, height: view.frame.height) : .zero
     }
     
     var blackViewOriginX: CGFloat {
-        return _showMenu ? view.frame.width - 60 : 0
+        return _showMenu ? view.frame.width - viewWidth : 0
     }
     
 }

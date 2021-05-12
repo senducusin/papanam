@@ -82,7 +82,7 @@ class ContainerController: UIViewController {
     // MARK: - Helpers
     private func setupBlackView() {
         view.addSubview(blackView)
-        blackView.frame = CGRect(x: self.view.frame.width - 60, y: 0, width: 60, height: view.frame.height)
+        blackView.frame = CGRect(x: self.view.frame.width - 80, y: 0, width: 80, height: view.frame.height)
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissMenuHandler))
         blackView.addGestureRecognizer(tap)
     }

@@ -18,6 +18,8 @@ struct User{
     let email: String
     let fullname: String
     let type: UserType
+    var homeLocation: String?
+    var workLocation: String?
     var location: CLLocation? = nil
 }
 
@@ -33,5 +35,8 @@ extension User {
         self.email = email
         self.fullname = fullname
         self.type = type
+        
+        self.homeLocation = dictionary["homeLocation"] as? String
+        self.workLocation = dictionary["workLocation"] as? String
     }
 }

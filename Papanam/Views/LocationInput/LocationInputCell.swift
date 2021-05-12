@@ -14,7 +14,19 @@ class LocationInputCell: UITableViewCell {
     
     var placemark: MKPlacemark? {
         didSet {
-            configure()
+            configureCellWithPlacemark()
+        }
+    }
+    
+    var settingsVm: SettingsViewModel? {
+        didSet {
+            configureCellWithSettingsVM()
+        }
+    }
+    
+    var searchItem: MKLocalSearchCompletion? {
+        didSet {
+            configureCellWithSearchItem()
         }
     }
     
@@ -54,10 +66,30 @@ class LocationInputCell: UITableViewCell {
         stack.spacing = 4
         addSubview(stack)
         stack.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 17)
+        stack.anchor(right: rightAnchor, paddingRight: 17)
     }
     
-    private func configure(){
+    private func configureCellWithPlacemark(){
         titleLabel.text = placemark?.name
         addressLabel.text = placemark?.address
+    }
+    
+    private func configureCellWithSettingsVM(){
+        titleLabel.text = settingsVm?.description
+        addressLabel.text = settingsVm?.subtitle
+    }
+    
+    private func configureCellWithSearchItem(){
+        titleLabel.text = searchItem?.title
+        addressLabel.text = searchItem?.subtitle
+    }
+}
+
+// MARK: - Public API
+
+extension LocationInputCell {
+    public func setupSettingsCell(withViewModel vm: SettingsViewModel?, value:String?){
+        titleLabel.text = vm?.description
+        addressLabel.text = value ?? vm?.subtitle
     }
 }

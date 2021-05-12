@@ -79,5 +79,12 @@ extension PassengerService {
     public func removeAllObservers(uid:String){
         Database.refTrips.child(uid).removeAllObservers()
     }
+    
+    public func saveLocation(locationString: String, vm: SettingsViewModel, completion:@escaping(Error?,DatabaseReference)->()){
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let type:String = vm == .home ? "homeLocation" : "workLocation"
+        Database.refUsers.child(uid).child(type).setValue(locationString, withCompletionBlock: completion)
+    }
 
 }
