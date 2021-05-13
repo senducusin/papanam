@@ -680,7 +680,6 @@ extension HomeController: MKMapViewDelegate{
         if mapView.overlays.count > 0 {
             mapView.removeOverlay(mapView.overlays[0])
         }
-        
     }
     
     private func setupDriver(user driver: User){

@@ -1,29 +1,24 @@
-# README #
+**Papanam**
 
-This README would normally document whatever steps are necessary to get your application up and running.
+A proof of concept of a cab app which is inspired by Uber.
 
-### What is this repository for? ###
+This app does not use storyboards except for the launch screen. 
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+---
 
-### How do I get set up? ###
+## Features
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+- Register and Login an account (Passenger/Driver)
+- Sliding Menu that contains basic operations
+- Search places and book rides with active drivers
+- Display drivers on the map, in passenger account
+- A status bar to show the trip's status
+ 
+---
 
-### Contribution guidelines ###
+## Demo  
+Login and Register Preview  
+![](/Previews/Auth.png)  
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+Preview
+![](/Previews/Demo.gif)  

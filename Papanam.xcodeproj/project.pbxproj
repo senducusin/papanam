@@ -19,6 +19,7 @@
 		A64A7AA3264115A7009FBF48 /* Database+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA2264115A7009FBF48 /* Database+Extensions.swift */; };
 		A64A7AA526411E99009FBF48 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA426411E99009FBF48 /* DriverAnnotation.swift */; };
 		A64A7AA72641231A009FBF48 /* MKAnnotationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A64A7AA62641231A009FBF48 /* MKAnnotationView+Extensions.swift */; };
+		A663DAD4264CDB8B00B16D82 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A663DAD3264CDB8B00B16D82 /* README.md */; };
 		A6651DD7264901DB004064A2 /* DriverService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DD6264901DB004064A2 /* DriverService.swift */; };
 		A6651DD9264903DB004064A2 /* PassengerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DD8264903DB004064A2 /* PassengerService.swift */; };
 		A6651DDC264909DE004064A2 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6651DDB264909DE004064A2 /* MenuController.swift */; };
@@ -80,6 +81,7 @@
 		A64A7AA2264115A7009FBF48 /* Database+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database+Extensions.swift"; sourceTree = "<group>"; };
 		A64A7AA426411E99009FBF48 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		A64A7AA62641231A009FBF48 /* MKAnnotationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKAnnotationView+Extensions.swift"; sourceTree = "<group>"; };
+		A663DAD3264CDB8B00B16D82 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A6651DD6264901DB004064A2 /* DriverService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverService.swift; sourceTree = "<group>"; };
 		A6651DD8264903DB004064A2 /* PassengerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassengerService.swift; sourceTree = "<group>"; };
 		A6651DDB264909DE004064A2 /* MenuController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 		A690FAA9263CDBAD005F1C98 = {
 			isa = PBXGroup;
 			children = (
+				A663DAD3264CDB8B00B16D82 /* README.md */,
 				A690FAB4263CDBAD005F1C98 /* Papanam */,
 				A690FAB3263CDBAD005F1C98 /* Products */,
 				BC65EB6C6B31E047EDE7E4AB /* Pods */,
@@ -395,6 +398,7 @@
 			files = (
 				A690FAC2263CDBAE005F1C98 /* LaunchScreen.storyboard in Resources */,
 				A690FABF263CDBAE005F1C98 /* Assets.xcassets in Resources */,
+				A663DAD4264CDB8B00B16D82 /* README.md in Resources */,
 				A6B62DC5263F9240008BB0EB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
