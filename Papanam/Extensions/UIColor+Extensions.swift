@@ -20,4 +20,6 @@ extension UIColor {
     static let themeLightGray = UIColor.rgba(red: 240, green: 238, blue: 242, alpha: 1)
     
     static let themeWhiteText = UIColor(white: 1, alpha: 0.87)
+    static let themeDarkRed = UIColor(red: 0.40, green: 0.00, blue: 0.00, alpha: 1.00)
+    static let themeRed = UIColor(red: 1.00, green: 0.00, blue: 0.00, alpha: 1.00)
 }

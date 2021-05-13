@@ -21,6 +21,20 @@ class PickupController: UIViewController {
     
     private let mapView = MKMapView()
     
+    private lazy var circularProgressView: CircularProgressView = {
+        let frame = CGRect(x: 0, y: 0, width: 360, height: 360)
+        let cpView = CircularProgressView(frame: frame)
+        cpView.addSubview(mapView)
+        
+        mapView.centerX(inView: cpView)
+        mapView.centerY(inView: cpView, constant: 28)
+        
+        mapView.setDimensions(height: 268, width: 268)
+        mapView.layer.cornerRadius = 268/2
+        
+        return cpView
+    }()
+    
     private let dismissButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage.cancelWithTint, for: .normal)
@@ -118,6 +132,7 @@ class PickupController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        self.perform(#selector(animateProgress),with: nil, afterDelay: 0.5)
     }
     
     // MARK: - Selectors
@@ -127,6 +142,13 @@ class PickupController: UIViewController {
     
     @objc private func handleAcceptTrip(){
         acceptTrip()
+    }
+    
+    @objc private func animateProgress(){
+        circularProgressView.animatePulsatingLayer()
+        circularProgressView.setProgressWithAnimation(duration: 5, value: 0) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     // MARK: - API
@@ -147,7 +169,7 @@ class PickupController: UIViewController {
     private func setupUI(){
         view.backgroundColor = .themeBlack
         setupDismissButton()
-        setupMapView()
+        setupCircularProgressView()
         setupInfoLabel()
         setupSeparatorView()
         setupStack()
@@ -161,12 +183,12 @@ class PickupController: UIViewController {
         dismissButton.anchor(top:view.safeAreaLayoutGuide.topAnchor, left:view.leftAnchor, paddingLeft: 16)
     }
     
-    private func setupMapView(){
-        view.addSubview(mapView)
-        mapView.setDimensions(height: 270, width: 270)
-        mapView.layer.cornerRadius = 135
-        mapView.centerX(inView: view)
-        mapView.anchor(top:view.safeAreaLayoutGuide.topAnchor, paddingTop: 84)
+    private func setupCircularProgressView(){
+        view.addSubview(circularProgressView)
+        circularProgressView.setDimensions(height: 360, width: 360)
+        circularProgressView.layer.cornerRadius = 180
+        circularProgressView.centerX(inView: view)
+        circularProgressView.anchor(top:view.safeAreaLayoutGuide.topAnchor, paddingTop: 22)
     }
     
     private func setupStack(){
@@ -183,7 +205,7 @@ class PickupController: UIViewController {
     
     private func setupInfoLabel(){
         view.addSubview(infoLabel)
-        infoLabel.anchor(top:mapView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 22, paddingLeft: 32, paddingRight: 32)
+        infoLabel.anchor(top:circularProgressView.bottomAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 52, paddingLeft: 32, paddingRight: 32)
     }
     
     private func setupSeparatorView(){

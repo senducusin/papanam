@@ -52,7 +52,7 @@ struct PickupViewModel {
         
         let dropoffLocation = CLLocation(latitude: destinationCoordinates.latitude, longitude: destinationCoordinates.longitude)
         
-        return getDoubleStrWithOneDecimal(pickupLocation.distance(from: dropoffLocation) / 1609.344, withUnit: "mi")
+        return getDoubleStrWithOneDecimal(pickupLocation.distance(from: dropoffLocation) / 1000, withUnit: "km")
     }
     
     public func getEta(completion:@escaping(String?)->()){

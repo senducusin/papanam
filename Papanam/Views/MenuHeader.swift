@@ -31,6 +31,25 @@ class MenuHeader: UIView {
         return label
     }()
     
+    private lazy var infoViewWithLabel: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.layer.cornerRadius = 30
+        
+        view.addSubview(infoViewLabel)
+        infoViewLabel.centerX(inView: view)
+        infoViewLabel.centerY(inView: view)
+        
+        return view
+    }()
+    
+    private let infoViewLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 30)
+        label.textColor = .white
+        return label
+    }()
+    
     var user: User? {
         didSet{
             configure()
@@ -54,6 +73,9 @@ class MenuHeader: UIView {
         guard let user = user else {return}
         fullnameLabel.text = user.fullname
         emailLabel.text = user.email
+        
+        guard let firstChar = user.fullname.first else {return}
+        infoViewLabel.text = String(firstChar)
     }
     
     private func setupUI(){
@@ -64,11 +86,11 @@ class MenuHeader: UIView {
     }
     
     private func setupProfileImageView(){
-        addSubview(profileImageView)
+        addSubview(infoViewWithLabel)
         
         let dimension:CGFloat = 64
-        profileImageView.anchor(top:safeAreaLayoutGuide.topAnchor, left:leftAnchor, paddingTop: 4, paddingLeft: 12, width: dimension, height: dimension)
-        profileImageView.layer.cornerRadius = dimension/2
+        infoViewWithLabel.anchor(top:safeAreaLayoutGuide.topAnchor, left:leftAnchor, paddingTop: 4, paddingLeft: 12, width: dimension, height: dimension)
+        infoViewWithLabel.layer.cornerRadius = dimension/2
     }
     
     private func setupStack(){
@@ -78,6 +100,6 @@ class MenuHeader: UIView {
         stack.axis = .vertical
         
         addSubview(stack)
-        stack.centerY(inView: profileImageView, leftAnchor: profileImageView.rightAnchor, paddingLeft: 12)
+        stack.centerY(inView: infoViewWithLabel, leftAnchor: infoViewWithLabel.rightAnchor, paddingLeft: 12)
     }
 }

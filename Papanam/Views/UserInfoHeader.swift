@@ -15,6 +15,25 @@ class UserInfoHeader: UIView {
         return imageView
     }()
     
+    private lazy var infoViewWithLabel: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.layer.cornerRadius = 30
+        
+        view.addSubview(infoViewLabel)
+        infoViewLabel.centerX(inView: view)
+        infoViewLabel.centerY(inView: view)
+        
+        return view
+    }()
+    
+    private let infoViewLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 30)
+        label.textColor = .white
+        return label
+    }()
+    
     private let fullnameLabel: UILabel = {
         let label = UILabel()
         label.text = "Fullname"
@@ -53,6 +72,9 @@ class UserInfoHeader: UIView {
         guard let user = user else {return}
         fullnameLabel.text = user.fullname
         emailLabel.text = user.email
+        
+        guard let firstChar = user.fullname.first else {return}
+        infoViewLabel.text = String(firstChar)
     }
     
     private func setupUI(){
@@ -63,13 +85,13 @@ class UserInfoHeader: UIView {
     }
     
     private func setupProfileImageView(){
-        addSubview(profileImageView)
+        addSubview(infoViewWithLabel)
         
         let dimension:CGFloat = 64
         
-        profileImageView.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 12)
-        profileImageView.setDimensions(height: dimension, width: dimension)
-        profileImageView.layer.cornerRadius = dimension/2
+        infoViewWithLabel.centerY(inView: self, leftAnchor: leftAnchor, paddingLeft: 12)
+        infoViewWithLabel.setDimensions(height: dimension, width: dimension)
+        infoViewWithLabel.layer.cornerRadius = dimension/2
     }
     
     private func setupStack(){
@@ -79,6 +101,6 @@ class UserInfoHeader: UIView {
         stack.axis = .vertical
         
         addSubview(stack)
-        stack.centerY(inView: profileImageView, leftAnchor: profileImageView.rightAnchor, paddingLeft: 12)
+        stack.centerY(inView: infoViewWithLabel, leftAnchor: infoViewWithLabel.rightAnchor, paddingLeft: 12)
     }
 }
