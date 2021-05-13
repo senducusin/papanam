@@ -20,5 +20,5 @@ This app does not use storyboards except for the launch screen.
 Login and Register Preview  
 ![](/Previews/Auth.png)  
 
-Preview
+Preview  
 ![](/Previews/Demo.gif)  
